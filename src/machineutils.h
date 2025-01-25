@@ -23,45 +23,45 @@
 #define MACHINEUTILS_H
 
 // Qt
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QMessageBox>
+#include <QMutableHashIterator>
 #include <QObject>
 #include <QSettings>
 #include <QUuid>
-#include <QDir>
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QMutableHashIterator>
-#include <QMessageBox>
-#include <QDebug>
 
 // Local
 #include "utils/systemutils.h"
 
 class Machine; // Forward declaration :'(
 
-class MachineUtils : public QObject {
+class MachineUtils : public QObject
+{
     Q_OBJECT
 
-    public:
-        explicit MachineUtils(QObject *parent = nullptr);
-        ~MachineUtils();
+public:
+    explicit MachineUtils(QObject *parent = nullptr);
+    ~MachineUtils();
 
-        static QJsonObject readMachineFile(QString machinePath);
-        static void fillMachineObject(Machine *machine,
-                                      QJsonObject machineJSON, QString machineConfigPath);
-        static bool deleteMachine(const QUuid machineUuid);
+    static QJsonObject readMachineFile(QString machinePath);
+    static void fillMachineObject(Machine *machine,
+                                  QJsonObject machineJSON,
+                                  QString machineConfigPath);
+    static bool deleteMachine(const QUuid machineUuid);
 
-        static QStringList getSoundCards(QJsonArray soundCardsArray);
-        static QStringList getAccelerators(QJsonArray acceleratorsArray);
-        static QStringList getMediaDevices(QJsonArray mediaDevicesArray);
+    static QStringList getSoundCards(QJsonArray soundCardsArray);
+    static QStringList getAccelerators(QJsonArray acceleratorsArray);
+    static QStringList getMediaDevices(QJsonArray mediaDevicesArray);
 
-    public slots:
+public slots:
 
-    protected:
-
-    private:
-
+protected:
+private:
 };
 
 #endif // MACHINEUTILS_H

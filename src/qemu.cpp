@@ -28,29 +28,35 @@
  *
  * QEMU object with properties of the emulator
  */
-QEMU::QEMU(QObject *parent) : QObject(parent)
+QEMU::QEMU(QObject *parent)
+    : QObject(parent)
 {
     QSettings settings;
     settings.beginGroup("Configuration");
 
     QString qemuBinariesPath;
     QString qemuImgPath;
-    #ifdef Q_OS_LINUX
-    qemuBinariesPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/bin")).toString();
+#ifdef Q_OS_LINUX
+    qemuBinariesPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/bin"))
+                           .toString();
     qemuImgPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/bin")).toString();
-    #endif
-    #ifdef Q_OS_WIN
+#endif
+#ifdef Q_OS_WIN
     qemuBinariesPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("C:\\")).toString();
     qemuImgPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("C:\\")).toString();
-    #endif
-    #ifdef Q_OS_MACOS
-    qemuBinariesPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/local/bin/")).toString();
-    qemuImgPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/local/bin/")).toString();
-    #endif
-    #ifdef Q_OS_FREEBSD
-    qemuBinariesPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/local/bin/")).toString();
-    qemuImgPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/local/bin/")).toString();
-    #endif
+#endif
+#ifdef Q_OS_MACOS
+    qemuBinariesPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/local/bin/"))
+                           .toString();
+    qemuImgPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/local/bin/"))
+                      .toString();
+#endif
+#ifdef Q_OS_FREEBSD
+    qemuBinariesPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/local/bin/"))
+                           .toString();
+    qemuImgPath = settings.value("qemuBinaryPath", QDir::toNativeSeparators("/usr/local/bin/"))
+                      .toString();
+#endif
     settings.endGroup();
     settings.sync();
 
@@ -83,7 +89,7 @@ QString QEMU::QEMUImgPath() const
  * Set the path of the qemu-img binary
  */
 void QEMU::setQEMUImgPath(const QString path)
-{    
+{
 #ifdef Q_OS_LINUX
     QString qemuImgPath = QDir::toNativeSeparators(path + "/qemu-img");
 #endif
@@ -133,9 +139,23 @@ void QEMU::setQEMUBinaries(const QString path)
 {
     this->m_QEMUBinaries.clear();
 
-    QDirIterator it(path, QStringList() << "qemu-system-*", QDir::NoFilter, QDirIterator::Subdirectories);
+#ifdef Q_OS_LINUX
+    QDirIterator it(path,
+                    QStringList() << "qemu-3dfx-system-*",
+                    QDir::NoFilter,
+                    QDirIterator::Subdirectories);
     while (it.hasNext()) {
         it.next();
+#endif
+#ifdef Q_OS_WIN
+    QDirIterator it(path,
+                    QStringList() << "qemu-system-*.exe",
+                    QDir::NoFilter,
+                    QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        it.next();
+#endif
+
 #ifdef Q_OS_WIN
         if (it.fileName().contains("w")) {
 #else

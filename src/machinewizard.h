@@ -23,9 +23,9 @@
 #define MACHINEWIZARD_H
 
 // Qt
-#include <QWizard>
-#include <QListWidget>
 #include <QFile>
+#include <QListWidget>
+#include <QWizard>
 
 #include <QDebug>
 
@@ -34,35 +34,42 @@
 #include "qemu.h"
 #include "utils/systemutils.h"
 
-#include "newmachine/generalpage.h"
-#include "newmachine/machinepage.h"
-#include "newmachine/hardwarepage.h"
 #include "newmachine/acceleratorpage.h"
-#include "newmachine/memorypage.h"
-#include "newmachine/diskpage.h"
 #include "newmachine/conclusionpage.h"
+#include "newmachine/diskpage.h"
+#include "newmachine/generalpage.h"
+#include "newmachine/hardwarepage.h"
+#include "newmachine/machinepage.h"
+#include "newmachine/memorypage.h"
 
-class MachineWizard : public QWizard {
+class MachineWizard : public QWizard
+{
     Q_OBJECT
 
-    public:
-        explicit MachineWizard(Machine *machine,
-                               QListWidget *osListWidget,
-                               QEMU *QEMUGlobalObject,
-                               QWidget *parent = nullptr);
-        ~MachineWizard();
+public:
+    explicit MachineWizard(Machine *machine,
+                           QListWidget *osListWidget,
+                           QEMU *QEMUGlobalObject,
+                           QWidget *parent = nullptr);
+    ~MachineWizard();
 
-        enum { Page_Name, Page_Machine, Page_Hardware, Page_Accelerator,
-               Page_Memory, Page_Disk, Page_New_Disk, Page_Conclusion };
+    enum {
+        Page_Name,
+        Page_Machine,
+        Page_Hardware,
+        Page_Accelerator,
+        Page_Memory,
+        Page_Disk,
+        Page_New_Disk,
+        Page_Conclusion
+    };
 
-    signals:
+signals:
 
-    public slots:
+public slots:
 
-    protected:
-
-    private:
-
+protected:
+private:
 };
 
 #endif // MACHINEWIZARD_H

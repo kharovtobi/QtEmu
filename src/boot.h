@@ -23,49 +23,48 @@
 #define BOOT_H
 
 // Qt
-#include <QObject>
 #include <QDebug>
+#include <QObject>
 
-class Boot: public QObject {
+class Boot : public QObject
+{
     Q_OBJECT
 
-    public:
-        explicit Boot(QObject *parent = nullptr);
-        ~Boot();
+public:
+    explicit Boot(QObject *parent = nullptr);
+    ~Boot();
 
-        bool bootMenu() const;
-        void setBootMenu(bool bootMenu);
+    bool bootMenu() const;
+    void setBootMenu(bool bootMenu);
 
-        bool kernelBootEnabled() const;
-        void setKernelBootEnabled(bool kernelBootEnabled);
+    bool kernelBootEnabled() const;
+    void setKernelBootEnabled(bool kernelBootEnabled);
 
-        QString kernelPath() const;
-        void setKernelPath(const QString &kernelPath);
+    QString kernelPath() const;
+    void setKernelPath(const QString &kernelPath);
 
-        QString initrdPath() const;
-        void setInitrdPath(const QString &initrdPath);
+    QString initrdPath() const;
+    void setInitrdPath(const QString &initrdPath);
 
-        QString kernelArgs() const;
-        void setKernelArgs(const QString &kernelArgs);
+    QString kernelArgs() const;
+    void setKernelArgs(const QString &kernelArgs);
 
-        QStringList bootOrder() const;
-        void setBootOrder(const QStringList &bootOrder);
+    QStringList bootOrder() const;
+    void setBootOrder(const QStringList &bootOrder);
 
-        // Methods
-        void addBootOrder(const QString bootOrder);
-        void removeBootOrder(const QString bootOrder);
-        void removeAllBootOrder();
+    // Methods
+    void addBootOrder(const QString bootOrder);
+    void removeBootOrder(const QString bootOrder);
+    void removeAllBootOrder();
 
-    protected:
-
-    private:
-        bool m_bootMenu;
-        bool m_kernelBootEnabled;
-        QString m_kernelPath;
-        QString m_initrdPath;
-        QString m_kernelArgs;
-        QStringList m_bootOrder;
-
+protected:
+private:
+    bool m_bootMenu;
+    bool m_kernelBootEnabled;
+    QString m_kernelPath;
+    QString m_initrdPath;
+    QString m_kernelArgs;
+    QStringList m_bootOrder;
 };
 
 #endif // BOOT_H

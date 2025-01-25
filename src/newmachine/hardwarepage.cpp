@@ -84,30 +84,30 @@ ProcessorTab::ProcessorTab(Machine *machine,
     m_CPUTypeLayout->addWidget(m_CPUTypeLabel);
     m_CPUTypeLayout->addWidget(m_CPUType);
 
-    m_CPUCountLabel = new QLabel(tr("SMP Core Count") + ":", this);
-    m_CPUCountLabel->setWordWrap(true);
+    m_CPUCoreCountLabel = new QLabel(tr("SMP Core Count") + ":", this);
+    m_CPUCoreCountLabel->setWordWrap(true);
     m_CPUCountSpinBox = new QSpinBox(this);
     m_CPUCountSpinBox->setMinimum(1);
     m_CPUCountSpinBox->setMaximum(core_count);
 
     if (core_count == 1)
-        this->selectCPUCount(1);
+        this->selectCPUCoreCount(1);
     else
-        this->selectCPUCount(core_count / 2);
+        this->selectCPUCoreCount(core_count / 2);
 
 
     connect(m_CPUCountSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            this, &ProcessorTab::selectCPUCount);
+            this, &ProcessorTab::selectCPUCoreCount);
 
-    m_CPUCountLayout = new QHBoxLayout();
-    m_CPUCountLayout->setAlignment(Qt::AlignVCenter);
-    m_CPUCountLayout->setSpacing(5);
-    m_CPUCountLayout->addWidget(m_CPUCountLabel);
-    m_CPUCountLayout->addWidget(m_CPUCountSpinBox);
+    m_CPUCoreCountLayout = new QHBoxLayout();
+    m_CPUCoreCountLayout->setAlignment(Qt::AlignVCenter);
+    m_CPUCoreCountLayout->setSpacing(5);
+    m_CPUCoreCountLayout->addWidget(m_CPUCoreCountLabel);
+    m_CPUCoreCountLayout->addWidget(m_CPUCountSpinBox);
 
     m_CPUSettingsLayout = new QVBoxLayout();
     m_CPUSettingsLayout->setAlignment(Qt::AlignVCenter);
-    m_CPUSettingsLayout->addItem(m_CPUCountLayout);
+    m_CPUSettingsLayout->addItem(m_CPUCoreCountLayout);
 
 
     m_CPUSettings = new QGroupBox(tr("CPU Settings"), this);
@@ -140,8 +140,18 @@ void ProcessorTab::selectProcessor(int index) {
  *
  * Select the processor count
  */
-void ProcessorTab::selectCPUCount(int CPUCount) {
-    this->m_newMachine->setCPUCount(CPUCount);
+void ProcessorTab::selectCPUCoreCount(int CPUCoreCount) {
+    this->m_newMachine->setCPUCoreCount(CPUCoreCount);
+}
+
+/**
+ * @brief Select the processor count
+ * @param CPUCount, number of processor count
+ *
+ * Select the processor count
+ */
+void ProcessorTab::selectCPUThreadCount(int CPUCoreCount) {
+    this->m_newMachine->setCPUCoreCount(CPUCoreCount);
 }
 
 /**

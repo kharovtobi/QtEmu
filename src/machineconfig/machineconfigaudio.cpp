@@ -96,10 +96,13 @@ MachineConfigAudio::MachineConfigAudio(Machine *machine,
     m_hostSoundSystemComboBox = new QComboBox();
     m_hostSoundSystemComboBox->setEnabled(enableFields);
     m_hostSoundSystemComboBox->addItem("alsa");
+    m_hostSoundSystemComboBox->addItem("pipewire");
+    m_hostSoundSystemComboBox->addItem("pulseaudio");
     m_hostSoundSystemComboBox->addItem("sdl");
     m_hostSoundSystemComboBox->addItem("pa");
     m_hostSoundSystemComboBox->addItem("spice");
     m_hostSoundSystemComboBox->addItem("wav");
+    m_hostSoundSystemComboBox->addItem("dsound");
     m_hostSoundSystemComboBox->addItem("none");
     m_hostSoundSystemComboBox->setCurrentText(this->m_machine->getHostSoundSystem());
 

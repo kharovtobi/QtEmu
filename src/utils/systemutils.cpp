@@ -223,6 +223,17 @@ void SystemUtils::setKeyboardLayout(QComboBox *keyboardLayout)
 }
 
 /**
+ * @brief Get the display
+ * @param DisplayLayout, combobox to change gui display
+ *
+ * Get the keyboard layouts
+ */
+void SystemUtils::setDisplayTypes(QComboBox *DisplayLayout)
+{
+    DisplayLayout->addItem("SDL",  QString("sdl"));
+    DisplayLayout->addItem("GTK",  QString("gtk"));
+}
+/**
  * @brief Get all the audio cards
  * @return hash with all the audio cards
  *

@@ -50,24 +50,40 @@ ProcessorConfigTab::ProcessorConfigTab(Machine *machine,
     m_CPUTypeLayout->addWidget(m_CPUTypeLabel);
     m_CPUTypeLayout->addWidget(m_CPUType);
 
-    m_CPUCountLabel = new QLabel(tr("SMP Core count") + ":", this);
-    m_CPUCountLabel->setWordWrap(true);
+    m_CPUCoreCountLabel = new QLabel(tr("SMP Core count") + ":", this);
+    m_CPUCoreCountLabel->setWordWrap(true);
 
-    m_CPUCountSpinBox = new QSpinBox(this);
-    m_CPUCountSpinBox->setMinimum(1);
-    m_CPUCountSpinBox->setMaximum(255);
-    m_CPUCountSpinBox->setValue(machine->getCPUCount());
-    m_CPUCountSpinBox->setEnabled(enableFields);
+    m_CPUCoreCountSpinBox = new QSpinBox(this);
+    m_CPUCoreCountSpinBox->setMinimum(1);
+    m_CPUCoreCountSpinBox->setMaximum(255);
+    m_CPUCoreCountSpinBox->setValue(machine->getCPUCoreCount());
+    m_CPUCoreCountSpinBox->setEnabled(enableFields);
 
-    m_CPUCountLayout = new QHBoxLayout();
-    m_CPUCountLayout->setAlignment(Qt::AlignVCenter);
-    m_CPUCountLayout->setSpacing(5);
-    m_CPUCountLayout->addWidget(m_CPUCountLabel);
-    m_CPUCountLayout->addWidget(m_CPUCountSpinBox);
+    m_CPUCoreCountLayout = new QHBoxLayout();
+    m_CPUCoreCountLayout->setAlignment(Qt::AlignVCenter);
+    m_CPUCoreCountLayout->setSpacing(5);
+    m_CPUCoreCountLayout->addWidget(m_CPUCoreCountLabel);
+    m_CPUCoreCountLayout->addWidget(m_CPUCoreCountSpinBox);
+
+    m_CPUThreadCountLabel = new QLabel(tr("SMP Threads count") + ":", this);
+    m_CPUThreadCountLabel->setWordWrap(true);
+
+    m_CPUThreadCountSpinBox = new QSpinBox(this);
+    m_CPUThreadCountSpinBox->setMinimum(1);
+    m_CPUThreadCountSpinBox->setMaximum(255);
+    m_CPUThreadCountSpinBox->setValue(machine->getCPUThreadCount());
+    m_CPUThreadCountSpinBox->setEnabled(enableFields);
+
+    m_CPUThreadCountLayout = new QHBoxLayout();
+    m_CPUThreadCountLayout->setAlignment(Qt::AlignVCenter);
+    m_CPUThreadCountLayout->setSpacing(5);
+    m_CPUThreadCountLayout->addWidget(m_CPUThreadCountLabel);
+    m_CPUThreadCountLayout->addWidget(m_CPUThreadCountSpinBox);
 
     m_CPUSettingsLayout = new QVBoxLayout();
     m_CPUSettingsLayout->setAlignment(Qt::AlignVCenter);
-    m_CPUSettingsLayout->addItem(m_CPUCountLayout);
+    m_CPUSettingsLayout->addItem(m_CPUCoreCountLayout);
+    m_CPUSettingsLayout->addItem(m_CPUThreadCountLayout);
 
     m_CPUSettings = new QGroupBox(tr("CPU Settings"), this);
     m_CPUSettings->setLayout(m_CPUSettingsLayout);
@@ -99,16 +115,26 @@ QString ProcessorConfigTab::getCPUType()
 }
 
 /**
- * @brief Get the CPU count
+ * @brief Get the CPU Core count
  * @return CPU count
  *
  * Get the CPU count
  */
-int ProcessorConfigTab::getCPUCount()
+int ProcessorConfigTab::getCPUCoreCount()
 {
-    return this->m_CPUCountSpinBox->value();
+    return this->m_CPUCoreCountSpinBox->value();
 }
 
+/**
+ * @brief Get the CPU Thread count
+ * @return CPU count
+ *
+ * Get the CPU count
+ */
+int ProcessorConfigTab::getCPUThreadCount()
+{
+    return this->m_CPUThreadCountSpinBox->value();
+}
 
 /**
  * @brief Tab with the GPU and keyboard
@@ -150,10 +176,25 @@ GraphicsConfigTab::GraphicsConfigTab(Machine *machine,
     m_keyboardLayout->addWidget(m_keyboardLabel);
     m_keyboardLayout->addWidget(m_keyboard);
 
+    m_displayLabel = new QLabel(tr("Display Type") + ":", this);
+    m_displayLabel->setWordWrap(true);
+    m_display = new QComboBox(this);
+    m_display->setEnabled(enableFields);
+    SystemUtils::setDisplayTypes(m_display);
+    int displayIndex = m_display->findData(machine->getDisplay());
+    if (displayIndex != -1) {
+        m_display->setCurrentIndex(displayIndex);
+    }
+
+    m_displayLayout = new QVBoxLayout();
+    m_displayLayout->addWidget(m_displayLabel);
+    m_displayLayout->addWidget(m_display);
+
     m_graphicsLayout = new QVBoxLayout();
     m_graphicsLayout->setAlignment(Qt::AlignTop);
     m_graphicsLayout->addItem(m_gpuLayout);
     m_graphicsLayout->addItem(m_keyboardLayout);
+    m_graphicsLayout->addItem(m_displayLayout);
 
     this->setLayout(m_graphicsLayout);
 
@@ -185,6 +226,17 @@ QString GraphicsConfigTab::getGPUType()
 QString GraphicsConfigTab::getKeyboardLayout()
 {
     return this->m_keyboard->currentData().toString();
+}
+
+/**
+ * @brief Get the ui display
+ * @return ui display
+ *
+ * Get the display
+ */
+QString GraphicsConfigTab::getDisplayType()
+{
+    return this->m_display->currentData().toString();
 }
 
 /**

@@ -74,6 +74,7 @@ class SystemUtils {
         static void setCPUTypesx86(QComboBox *CPUType);
         static void setGPUTypes(QComboBox *GPUType);
         static void setKeyboardLayout(QComboBox *keyboardLayout);
+        static void setDisplayTypes(QComboBox *DisplayLayout);
         static QHash<QString, QString> getSoundCards();
         static QHash<QString, QString> getAccelerators();
         static QMap<QString, QString> getMediaDevices();

@@ -23,98 +23,99 @@
 #define ABOUTWIDGET_H
 
 // Qt
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
 #include <QAction>
+#include <QApplication>
 #include <QCloseEvent>
+#include <QDebug>
+#include <QHBoxLayout>
 #include <QHideEvent>
-#include <QTabWidget>
 #include <QLabel>
 #include <QPixmap>
-#include <QApplication>
+#include <QPushButton>
+#include <QTabWidget>
 #include <QTextBrowser>
-#include <QDebug>
+#include <QVBoxLayout>
+#include <QWidget>
 
-class AboutTab : public QWidget {
+class AboutTab : public QWidget
+{
     Q_OBJECT
 
-    public:
-        explicit AboutTab(QWidget *parent = nullptr);
-        ~AboutTab();
-    signals:
+public:
+    explicit AboutTab(QWidget *parent = nullptr);
+    ~AboutTab();
+signals:
 
-    public slots:
+public slots:
 
-    protected:
-
-    private:
-        QVBoxLayout *m_mainLayout;
-        QLabel *m_about;
-        QLabel *m_copyright;
-        QLabel *m_urlSite;
+protected:
+private:
+    QVBoxLayout *m_mainLayout;
+    QLabel *m_about;
+    QLabel *m_copyright;
+    QLabel *m_urlSite;
 };
 
-class AuthorsTab : public QWidget {
+class AuthorsTab : public QWidget
+{
     Q_OBJECT
 
-    public:
-        explicit AuthorsTab(QWidget *parent = nullptr);
-        ~AuthorsTab();
+public:
+    explicit AuthorsTab(QWidget *parent = nullptr);
+    ~AuthorsTab();
 
-    signals:
+signals:
 
-    public slots:
+public slots:
 
-    protected:
-
-    private:
-        QVBoxLayout *m_mainLayout;
-        QTextBrowser *m_authorsBrowser;
+protected:
+private:
+    QVBoxLayout *m_mainLayout;
+    QTextBrowser *m_authorsBrowser;
 };
 
-class LicenseTab : public QWidget {
+class LicenseTab : public QWidget
+{
     Q_OBJECT
 
-    public:
-        explicit LicenseTab(QWidget *parent = nullptr);
-        ~LicenseTab();
+public:
+    explicit LicenseTab(QWidget *parent = nullptr);
+    ~LicenseTab();
 
-    signals:
+signals:
 
-    public slots:
+public slots:
 
-    protected:
-
-    private:
-        QVBoxLayout *m_mainLayout;
-        QTextBrowser *m_licenseBrowser;
+protected:
+private:
+    QVBoxLayout *m_mainLayout;
+    QTextBrowser *m_licenseBrowser;
 };
 
-class AboutWidget : public QWidget {
+class AboutWidget : public QWidget
+{
     Q_OBJECT
 
-    public:
-        explicit AboutWidget(QWidget *parent = nullptr);
-        ~AboutWidget();
+public:
+    explicit AboutWidget(QWidget *parent = nullptr);
+    ~AboutWidget();
 
-    signals:
+signals:
 
-    public slots:
+public slots:
 
-    protected:
-        virtual void closeEvent(QCloseEvent *event);
-        virtual void hideEvent(QHideEvent *event);
+protected:
+    virtual void closeEvent(QCloseEvent *event);
+    virtual void hideEvent(QHideEvent *event);
 
-    private:
-        QVBoxLayout *m_mainLayout;
-        QHBoxLayout *m_iconLayout;
-        QPushButton *m_closeButton;
-        QAction *m_closeAction;
-        QTabWidget *m_tabWidget;
-        QLabel *m_qtemuIcon;
-        QLabel *m_qtemuAppInfo;
+private:
+    QVBoxLayout *m_mainLayout;
+    QHBoxLayout *m_iconLayout;
+    QPushButton *m_closeButton;
+    QAction *m_closeAction;
+    QTabWidget *m_tabWidget;
+    QLabel *m_qtemuIcon;
+    QLabel *m_qtemuAppInfo;
 };
 
 #endif // ABOUTWIDGET_H

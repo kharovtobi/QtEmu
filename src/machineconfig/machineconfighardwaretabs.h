@@ -45,7 +45,8 @@ class ProcessorConfigTab: public QWidget {
 
         // Methods
         QString getCPUType();
-        int getCPUCount();
+        int getCPUCoreCount();
+        int getCPUThreadCount();
 
     signals:
 
@@ -55,7 +56,8 @@ class ProcessorConfigTab: public QWidget {
 
     private:
         QHBoxLayout *m_CPUTypeLayout;
-        QHBoxLayout *m_CPUCountLayout;
+        QHBoxLayout *m_CPUCoreCountLayout;
+        QHBoxLayout *m_CPUThreadCountLayout;
         QVBoxLayout *m_CPUSettingsLayout;
         QVBoxLayout *m_processorLayout;
 
@@ -64,9 +66,11 @@ class ProcessorConfigTab: public QWidget {
         QGroupBox *m_CPUSettings;
 
         QLabel *m_CPUTypeLabel;
-        QLabel *m_CPUCountLabel;
+        QLabel *m_CPUCoreCountLabel;
+        QLabel *m_CPUThreadCountLabel;
 
-        QSpinBox *m_CPUCountSpinBox;
+        QSpinBox *m_CPUCoreCountSpinBox;
+        QSpinBox *m_CPUThreadCountSpinBox;
 
 };
 
@@ -82,6 +86,7 @@ class GraphicsConfigTab: public QWidget {
         // Methods
         QString getGPUType();
         QString getKeyboardLayout();
+        QString getDisplayType();
 
     signals:
 
@@ -93,12 +98,15 @@ class GraphicsConfigTab: public QWidget {
         QHBoxLayout *m_gpuLayout;
         QHBoxLayout *m_keyboardLayout;
         QVBoxLayout *m_graphicsLayout;
+        QVBoxLayout *m_displayLayout;
 
         QComboBox *m_GPUType;
         QComboBox *m_keyboard;
+        QComboBox *m_display;
 
         QLabel *m_GPUTypeLabel;
         QLabel *m_keyboardLabel;
+        QLabel *m_displayLabel;
 
 };
 

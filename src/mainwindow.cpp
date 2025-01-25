@@ -28,7 +28,8 @@
  *
  * Main window of QtEmu, with all the machines, menus, details of the machines...
  */
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
 {
     this->setWindowTitle("QtEmu");
     this->setWindowIcon(QIcon::fromTheme("qtemu", QIcon(":/images/qtemu.png")));
@@ -43,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     qemuGlobalObject = new QEMU(this);
 
     m_configWindow = new ConfigWindow(qemuGlobalObject, this);
-    m_helpwidget  = new HelpWidget(this);
+    m_helpwidget = new HelpWidget(this);
     m_aboutwidget = new AboutWidget(this);
 
     // Prepare main layout
@@ -55,16 +56,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     m_osListWidget->setMaximumWidth(170);
     m_osListWidget->setSpacing(7);
 
-    m_machineNameLabel     = new QLabel(this);
-    m_machineOsLabel       = new QLabel(this);
-    m_machineCPULabel      = new QLabel(this);
-    m_machineRAMLabel      = new QLabel(this);
+    m_machineNameLabel = new QLabel(this);
+    m_machineOsLabel = new QLabel(this);
+    m_machineCPULabel = new QLabel(this);
+    m_machineRAMLabel = new QLabel(this);
     m_machineGraphicsLabel = new QLabel(this);
-    m_machineAudioLabel    = new QLabel(this);
+    m_machineAudioLabel = new QLabel(this);
     m_machineAudioLabel->setWordWrap(true);
-    m_machineAccelLabel    = new QLabel(this);
-    m_machineNetworkLabel  = new QLabel(this);
-    m_machineMediaLabel    = new QLabel(this);
+    m_machineAccelLabel = new QLabel(this);
+    m_machineNetworkLabel = new QLabel(this);
+    m_machineMediaLabel = new QLabel(this);
     m_machineMediaLabel->setWordWrap(true);
 
     m_machineDetailsLayout = new QFormLayout();
@@ -117,11 +118,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->loadUI(m_osListWidget->count());
 
     // Connect
-    connect(m_osListWidget, &QListWidget::itemClicked,
-            this, &MainWindow::changeMachine);
+    connect(m_osListWidget, &QListWidget::itemClicked, this, &MainWindow::changeMachine);
 
-    connect(m_osListWidget, &QListWidget::customContextMenuRequested,
-            this, &MainWindow::machinesMenu);
+    connect(m_osListWidget,
+            &QListWidget::customContextMenuRequested,
+            this,
+            &MainWindow::machinesMenu);
 }
 
 MainWindow::~MainWindow()
@@ -179,126 +181,139 @@ void MainWindow::createMenus()
 void MainWindow::createMenusActions()
 {
     // Actions for File menu
-    m_importMachineAction = new QAction(QIcon::fromTheme("document-import",
-                                                         QIcon(QPixmap(":/images/icons/breeze/32x32/document-import.svg"))),
-                                         tr("Import machine"),
-                                         this);
-    connect(m_importMachineAction, &QAction::triggered,
-            this, &MainWindow::importMachine);
+    m_importMachineAction
+        = new QAction(QIcon::fromTheme("document-import",
+                                       QIcon(QPixmap(
+                                           ":/images/icons/breeze/32x32/document-import.svg"))),
+                      tr("Import machine"),
+                      this);
+    connect(m_importMachineAction, &QAction::triggered, this, &MainWindow::importMachine);
 
-    m_preferencesAppAction = new QAction(QIcon::fromTheme("configure",
-                                                          QIcon(QPixmap(":/images/icons/breeze/32x32/configure.svg"))),
-                                         tr("Preferences"),
-                                         this);
-    connect(m_preferencesAppAction, &QAction::triggered,
-            m_configWindow, &QWidget::show);
+    m_preferencesAppAction
+        = new QAction(QIcon::fromTheme("configure",
+                                       QIcon(QPixmap(":/images/icons/breeze/32x32/configure.svg"))),
+                      tr("Preferences"),
+                      this);
+    connect(m_preferencesAppAction, &QAction::triggered, m_configWindow, &QWidget::show);
 #ifndef Q_OS_WIN
-    m_checkUpdateAppAction = new QAction(QIcon::fromTheme("update-none",
-                                                          QIcon(QPixmap(":/images/icons/breeze/32x32/update-none.svg"))),
-                                         tr("Check for updates"),
-                                         this);
-    connect(m_checkUpdateAppAction, &QAction::triggered,
-            this, &MainWindow::checkVersions);
+    m_checkUpdateAppAction
+        = new QAction(QIcon::fromTheme("update-none",
+                                       QIcon(
+                                           QPixmap(":/images/icons/breeze/32x32/update-none.svg"))),
+                      tr("Check for updates"),
+                      this);
+    connect(m_checkUpdateAppAction, &QAction::triggered, this, &MainWindow::checkVersions);
 #endif
-    m_exitAppAction = new QAction(QIcon::fromTheme("application-exit",
-                                                   QIcon(QPixmap(":/images/icons/breeze/32x32/application-exit.svg"))),
-                                  tr("Exit"),
-                                  this);
-    connect(m_exitAppAction, &QAction::triggered,
-            this, &MainWindow::quitApp);
+    m_exitAppAction
+        = new QAction(QIcon::fromTheme("application-exit",
+                                       QIcon(QPixmap(
+                                           ":/images/icons/breeze/32x32/application-exit.svg"))),
+                      tr("Exit"),
+                      this);
+    connect(m_exitAppAction, &QAction::triggered, this, &MainWindow::quitApp);
 
     // Actions for Machine menu
-    m_newMachineAction = new QAction(QIcon::fromTheme("project-development-new-template",
-                                                      QIcon(QPixmap(":/images/icons/breeze/32x32/project-development-new-template.svg"))),
-                                     tr("New Machine"),
-                                     this);
-    connect(m_newMachineAction, &QAction::triggered,
-            this, &MainWindow::createNewMachine);
+    m_newMachineAction = new QAction(
+        QIcon::fromTheme("project-development-new-template",
+                         QIcon(QPixmap(
+                             ":/images/icons/breeze/32x32/project-development-new-template.svg"))),
+        tr("New Machine"),
+        this);
+    connect(m_newMachineAction, &QAction::triggered, this, &MainWindow::createNewMachine);
 
-    m_settingsMachineAction = new QAction(QIcon::fromTheme("configure",
-                                                           QIcon(QPixmap(":/images/icons/breeze/32x32/settings-configure.svg"))),
-                                          tr("Machine Settings"),
-                                          this);
-    connect(m_settingsMachineAction, &QAction::triggered,
-            this, &MainWindow::machineOptions);
+    m_settingsMachineAction
+        = new QAction(QIcon::fromTheme("configure",
+                                       QIcon(QPixmap(
+                                           ":/images/icons/breeze/32x32/settings-configure.svg"))),
+                      tr("Machine Settings"),
+                      this);
+    connect(m_settingsMachineAction, &QAction::triggered, this, &MainWindow::machineOptions);
 
-    m_exportMachineAction = new QAction(QIcon::fromTheme("document-export",
-                                                         QIcon(QPixmap(":/images/icons/breeze/32x32/document-export.svg"))),
-                                        tr("Export machine"),
-                                        this);
-    connect(m_exportMachineAction, &QAction::triggered,
-            this, &MainWindow::exportMachine);
+    m_exportMachineAction
+        = new QAction(QIcon::fromTheme("document-export",
+                                       QIcon(QPixmap(
+                                           ":/images/icons/breeze/32x32/document-export.svg"))),
+                      tr("Export machine"),
+                      this);
+    connect(m_exportMachineAction, &QAction::triggered, this, &MainWindow::exportMachine);
 
-    m_removeMachineAction = new QAction(QIcon::fromTheme("project-development-close",
-                                                         QIcon(QPixmap(":/images/icons/breeze/32x32/project-development-close.svg"))),
-                                        tr("Remove Machine"),
-                                        this);
-    connect(m_removeMachineAction, &QAction::triggered,
-            this, &MainWindow::deleteMachine);
+    m_removeMachineAction = new QAction(
+        QIcon::fromTheme("project-development-close",
+                         QIcon(
+                             QPixmap(":/images/icons/breeze/32x32/project-development-close.svg"))),
+        tr("Remove Machine"),
+        this);
+    connect(m_removeMachineAction, &QAction::triggered, this, &MainWindow::deleteMachine);
 
     // Actions for Help menu
-    m_helpQuickHelpAction = new QAction(QIcon::fromTheme("help-contents",
-                                                         QIcon(QPixmap(":/images/icons/breeze/32x32/help-contents.svg"))),
-                                        tr("QtEmu &Quick Help"),
-                                        this);
+    m_helpQuickHelpAction
+        = new QAction(QIcon::fromTheme("help-contents",
+                                       QIcon(QPixmap(
+                                           ":/images/icons/breeze/32x32/help-contents.svg"))),
+                      tr("QtEmu &Quick Help"),
+                      this);
     m_helpQuickHelpAction->setShortcut(Qt::Key_F1);
-    connect(m_helpQuickHelpAction, &QAction::triggered,
-            m_helpwidget, &QWidget::show);
+    connect(m_helpQuickHelpAction, &QAction::triggered, m_helpwidget, &QWidget::show);
 
-    m_helpQtEmuWebsiteAction = new QAction(QIcon::fromTheme("internet-web-browser",
-                                                            QIcon(QPixmap(":/images/icons/breeze/32x32/network-manager.svg"))),
-                                           tr("QtEmu &Website"),
-                                           this);
-    connect(m_helpQtEmuWebsiteAction, &QAction::triggered,
-            this, &MainWindow::visitQtEmuWebsite);
+    m_helpQtEmuWebsiteAction
+        = new QAction(QIcon::fromTheme("internet-web-browser",
+                                       QIcon(QPixmap(
+                                           ":/images/icons/breeze/32x32/network-manager.svg"))),
+                      tr("QtEmu &Website"),
+                      this);
+    connect(m_helpQtEmuWebsiteAction, &QAction::triggered, this, &MainWindow::visitQtEmuWebsite);
 
-    m_helpQtEmuBugTrackerAction = new QAction(QIcon::fromTheme("tools-report-bug",
-                                                               QIcon(QPixmap(":/images/icons/breeze/32x32/tools-report-bug.svg"))),
-                                              tr("QtEmu Bug Tracker"),
-                                              this);
-    connect(m_helpQtEmuBugTrackerAction, &QAction::triggered,
-            this, &MainWindow::visitQtEmuBugTracker);
+    m_helpQtEmuBugTrackerAction
+        = new QAction(QIcon::fromTheme("tools-report-bug",
+                                       QIcon(QPixmap(
+                                           ":/images/icons/breeze/32x32/tools-report-bug.svg"))),
+                      tr("QtEmu Bug Tracker"),
+                      this);
+    connect(m_helpQtEmuBugTrackerAction,
+            &QAction::triggered,
+            this,
+            &MainWindow::visitQtEmuBugTracker);
 
-    m_helpQemuWebsiteAction = new QAction(QIcon::fromTheme("internet-web-browser",
-                                                           QIcon(QPixmap(":/images/icons/breeze/32x32/network-manager.svg"))),
-                                          tr("Qemu &Website"),
-                                          this);
-    connect(m_helpQemuWebsiteAction, &QAction::triggered,
-            this, &MainWindow::visitQemuWebsite);
+    m_helpQemuWebsiteAction
+        = new QAction(QIcon::fromTheme("internet-web-browser",
+                                       QIcon(QPixmap(
+                                           ":/images/icons/breeze/32x32/network-manager.svg"))),
+                      tr("Qemu &Website"),
+                      this);
+    connect(m_helpQemuWebsiteAction, &QAction::triggered, this, &MainWindow::visitQemuWebsite);
 
-    m_helpAboutAction = new QAction(QIcon::fromTheme("qtemu",
-                                                     QIcon(":/images/qtemu.png")),
+    m_helpAboutAction = new QAction(QIcon::fromTheme("qtemu", QIcon(":/images/qtemu.png")),
                                     tr("&About QtEmu"),
                                     this);
-    connect(m_helpAboutAction, &QAction::triggered,
-            m_aboutwidget, &QWidget::show);
+    connect(m_helpAboutAction, &QAction::triggered, m_aboutwidget, &QWidget::show);
 
     // Actions for Machine toolbar
     m_startMachineAction = new QAction(this);
-    m_startMachineAction->setIcon(QIcon::fromTheme("media-playback-start",
-                                                   QIcon(QPixmap(":/images/icons/breeze/32x32/start.svg"))));
+    m_startMachineAction->setIcon(
+        QIcon::fromTheme("media-playback-start",
+                         QIcon(QPixmap(":/images/icons/breeze/32x32/start.svg"))));
     m_startMachineAction->setToolTip(tr("Start machine"));
-    connect(m_startMachineAction, &QAction::triggered,
-            this, &MainWindow::runMachine);
+    connect(m_startMachineAction, &QAction::triggered, this, &MainWindow::runMachine);
 
     m_stopMachineAction = new QAction(this);
-    m_stopMachineAction->setIcon(QIcon::fromTheme("media-playback-stop",
-                                                  QIcon(QPixmap(":/images/icons/breeze/32x32/stop.svg"))));
+    m_stopMachineAction->setIcon(
+        QIcon::fromTheme("media-playback-stop",
+                         QIcon(QPixmap(":/images/icons/breeze/32x32/stop.svg"))));
     m_stopMachineAction->setToolTip(tr("Stop machine"));
 
     m_resetMachineAction = new QAction(this);
-    m_resetMachineAction->setIcon(QIcon::fromTheme("chronometer-reset",
-                                                   QIcon(QPixmap(":/images/icons/breeze/32x32/chronometer-reset.svg"))));
+    m_resetMachineAction->setIcon(
+        QIcon::fromTheme("chronometer-reset",
+                         QIcon(QPixmap(":/images/icons/breeze/32x32/chronometer-reset.svg"))));
     m_resetMachineAction->setToolTip(tr("Reset machine"));
-    connect(m_resetMachineAction, &QAction::triggered,
-            this, &MainWindow::resetMachine);
+    connect(m_resetMachineAction, &QAction::triggered, this, &MainWindow::resetMachine);
 
     m_pauseMachineAction = new QAction(this);
-    m_pauseMachineAction->setIcon(QIcon::fromTheme("media-playback-pause",
-                                                   QIcon(QPixmap(":/images/icons/breeze/32x32/pause.svg"))));
+    m_pauseMachineAction->setIcon(
+        QIcon::fromTheme("media-playback-pause",
+                         QIcon(QPixmap(":/images/icons/breeze/32x32/pause.svg"))));
     m_pauseMachineAction->setToolTip(tr("Pause machine"));
-    connect(m_pauseMachineAction, &QAction::triggered,
-            this, &MainWindow::pauseMachine);
+    connect(m_pauseMachineAction, &QAction::triggered, this, &MainWindow::pauseMachine);
 }
 
 /**
@@ -364,11 +379,11 @@ void MainWindow::checkVersions()
     QNetworkAccessManager networkAccessManager;
     QNetworkReply *reply = networkAccessManager.get(request);
 
-    while(!reply->isFinished()) {
+    while (!reply->isFinished()) {
         qApp->processEvents();
     }
 
-    if (reply->error()) {        
+    if (reply->error()) {
         SystemUtils::showMessage(tr("QtEmu - Network problem"),
                                  tr("<p>There's a network problem</p>"),
                                  QMessageBox::Critical);
@@ -384,8 +399,10 @@ void MainWindow::checkVersions()
     reply->deleteLater();
 
     SystemUtils::showMessage(tr("QtEmu - versions"),
-                             tr("<p><strong>QtEmu installed version: </strong>") + installedQtEmuVersion + "</p>" +
-                             tr("<p><strong>Last QtEmu version: </strong>") + qtemuVersion + "</p>",
+                             tr("<p><strong>QtEmu installed version: </strong>")
+                                 + installedQtEmuVersion + "</p>"
+                                 + tr("<p><strong>Last QtEmu version: </strong>") + qtemuVersion
+                                 + "</p>",
                              QMessageBox::Critical);
 }
 
@@ -401,10 +418,14 @@ void MainWindow::quitApp()
     }
 
     int confirmation = QMessageBox::question(this,
-                          tr("Quit?"),
-                          tr("Do you really want to close QtEmu?\nIf there are machines running there are going to close"),
-                          tr("&Yes, close the program"), tr("&No"),
-                          QString(), 1, 1);
+                                             tr("Quit?"),
+                                             tr("Do you really want to close QtEmu?\nIf there are "
+                                                "machines running there are going to close"),
+                                             tr("&Yes, close the program"),
+                                             tr("&No"),
+                                             QString(),
+                                             1,
+                                             1);
 
     if (confirmation == 0) {
         qApp->setQuitOnLastWindowClosed(true);
@@ -422,8 +443,10 @@ void MainWindow::loadMachines()
 {
     QSettings settings;
     settings.beginGroup("DataFolder");
-    QString dataDirectoryPath = settings.value("QtEmuData",
-                                               QDir::toNativeSeparators(QDir::homePath() + "/.qtemu/")).toString();
+    QString dataDirectoryPath = settings
+                                    .value("QtEmuData",
+                                           QDir::toNativeSeparators(QDir::homePath() + "/.qtemu/"))
+                                    .toString();
     settings.endGroup();
 
     // Open the file with the machines
@@ -434,7 +457,7 @@ void MainWindow::loadMachines()
         return;
     }
 
-    if (!machinesFile.open(QIODevice::ReadOnly)) {        
+    if (!machinesFile.open(QIODevice::ReadOnly)) {
         SystemUtils::showMessage(tr("QtEmu - Critical error"),
                                  tr("<p><strong>Cannot load the saved machines</strong></p>"
                                     "<p>Cannot open the <strong>qtemu.json</strong> file. "
@@ -474,10 +497,11 @@ void MainWindow::generateMachineObject(const QJsonObject machineConfigJsonObject
         return;
     }
 
-    QListWidgetItem *machineListItem = new QListWidgetItem(machineJSON["name"].toString(), this->m_osListWidget);
+    QListWidgetItem *machineListItem = new QListWidgetItem(machineJSON["name"].toString(),
+                                                           this->m_osListWidget);
     machineListItem->setData(QMetaType::QUuid, machineJSON["uuid"].toString());
-    machineListItem->setIcon(QIcon(":/images/os/64x64/" +
-                                   SystemUtils::getOsIcon(machineConfigJsonObject["icon"].toString())));
+    machineListItem->setIcon(QIcon(
+        ":/images/os/64x64/" + SystemUtils::getOsIcon(machineConfigJsonObject["icon"].toString())));
 
     // To prevent undefined behavior :'(
     if (pos == 0) {
@@ -485,12 +509,9 @@ void MainWindow::generateMachineObject(const QJsonObject machineConfigJsonObject
     }
 
     Machine *machine = new Machine(this);
-    connect(machine, &Machine::machineStateChangedSignal,
-            this, &MainWindow::machineStateChanged);
+    connect(machine, &Machine::machineStateChangedSignal, this, &MainWindow::machineStateChanged);
 
-    MachineUtils::fillMachineObject(machine,
-                                    machineJSON,
-                                    machineConfigPath);
+    MachineUtils::fillMachineObject(machine, machineJSON, machineConfigPath);
 
     this->m_machinesList.append(machine);
 }
@@ -511,8 +532,7 @@ void MainWindow::createNewMachine()
     m_machine->setMaxHotCPU(0);
     m_machine->setState(Machine::Stopped);
 
-    connect(m_machine, &Machine::machineStateChangedSignal,
-            this, &MainWindow::machineStateChanged);
+    connect(m_machine, &Machine::machineStateChangedSignal, this, &MainWindow::machineStateChanged);
 
     MachineWizard newMachineWizard(m_machine, this->m_osListWidget, this->qemuGlobalObject, this);
 
@@ -537,7 +557,7 @@ void MainWindow::deleteMachine()
     if (isMachineDeleted) {
         this->m_osListWidget->takeItem(this->m_osListWidget->currentRow());
         bool machineRemovedList = false;
-        QMutableListIterator<Machine*> machines(this->m_machinesList);
+        QMutableListIterator<Machine *> machines(this->m_machinesList);
         while (machines.hasNext() && !machineRemovedList) {
             if (machines.next()->getUuid() == machineUuid) {
                 machines.remove();
@@ -559,7 +579,7 @@ void MainWindow::machineOptions()
     QUuid machineUuid = this->m_osListWidget->currentItem()->data(QMetaType::QUuid).toUuid();
     Machine *machineOptions = nullptr;
     foreach (Machine *machine, this->m_machinesList) {
-        if (machine->getUuid() == machineUuid){
+        if (machine->getUuid() == machineUuid) {
             machineOptions = machine;
             break;
         }
@@ -571,8 +591,10 @@ void MainWindow::machineOptions()
                                                     this);
     m_machineConfigWindow->show();
 
-    connect(m_machineConfigWindow, &MachineConfigWindow::saveMachineSettingsSignal,
-            this, &MainWindow::updateMachineDetailsConfig);
+    connect(m_machineConfigWindow,
+            &MachineConfigWindow::saveMachineSettingsSignal,
+            this,
+            &MainWindow::updateMachineDetailsConfig);
 }
 
 /**
@@ -586,7 +608,7 @@ void MainWindow::exportMachine()
     QUuid machineUuid = this->m_osListWidget->currentItem()->data(QMetaType::QUuid).toUuid();
     QString machineConfigPath;
     foreach (Machine *machine, this->m_machinesList) {
-        if (machine->getUuid() == machineUuid){
+        if (machine->getUuid() == machineUuid) {
             machineConfigPath = machine->getConfigPath();
             break;
         }
@@ -613,8 +635,7 @@ void MainWindow::exportMachine()
 void MainWindow::importMachine()
 {
     Machine *machine = new Machine(this);
-    connect(machine, &Machine::machineStateChangedSignal,
-            this, &MainWindow::machineStateChanged);
+    connect(machine, &Machine::machineStateChangedSignal, this, &MainWindow::machineStateChanged);
 
     ImportWizard importWizard(machine, this->m_osListWidget, this);
 
@@ -639,7 +660,7 @@ void MainWindow::runMachine()
 {
     QUuid machineUuid = this->m_osListWidget->currentItem()->data(QMetaType::QUuid).toUuid();
     foreach (Machine *machine, this->m_machinesList) {
-        if (machine->getUuid() == machineUuid){
+        if (machine->getUuid() == machineUuid) {
             machine->runMachine(this->qemuGlobalObject);
             break;
         }
@@ -655,7 +676,7 @@ void MainWindow::resetMachine()
 {
     QUuid machineUuid = this->m_osListWidget->currentItem()->data(QMetaType::QUuid).toUuid();
     foreach (Machine *machine, this->m_machinesList) {
-        if (machine->getUuid() == machineUuid){
+        if (machine->getUuid() == machineUuid) {
             machine->resetMachine();
             break;
         }
@@ -674,7 +695,7 @@ void MainWindow::pauseMachine()
 {
     QUuid machineUuid = this->m_osListWidget->currentItem()->data(QMetaType::QUuid).toUuid();
     foreach (Machine *machine, this->m_machinesList) {
-        if (machine->getUuid() == machineUuid){
+        if (machine->getUuid() == machineUuid) {
             machine->pauseMachine();
             break;
         }
@@ -707,7 +728,7 @@ void MainWindow::loadUI(const int machineCount)
     } else {
         QUuid machineUuid = this->m_osListWidget->currentItem()->data(QMetaType::QUuid).toUuid();
         foreach (Machine *machine, this->m_machinesList) {
-            if (machine->getUuid() == machineUuid){
+            if (machine->getUuid() == machineUuid) {
                 this->m_settingsMachineAction->setEnabled(true);
                 this->m_exportMachineAction->setEnabled(true);
                 this->m_removeMachineAction->setEnabled(true);
@@ -756,11 +777,11 @@ void MainWindow::fillMachineDetailsSection(Machine *machine)
     this->m_machineNetworkLabel->setText(machine->getUseNetwork() == true ? tr("Yes") : tr("no"));
     QString mediaLabel;
     for (int i = 0; i < machine->getMedia().size(); ++i) {
-         mediaLabel.append("(")
-                   .append(machine->getMedia().at(i)->driveInterface().toUpper())
-                   .append(") ")
-                   .append(machine->getMedia().at(i)->name())
-                   .append("\n");
+        mediaLabel.append("(")
+            .append(machine->getMedia().at(i)->driveInterface().toUpper())
+            .append(") ")
+            .append(machine->getMedia().at(i)->name())
+            .append("\n");
     }
     this->m_machineMediaLabel->setText(mediaLabel);
 }
@@ -821,12 +842,12 @@ void MainWindow::controlMachineActions(Machine::States state)
         this->m_stopMachineAction->setEnabled(true);
         this->m_resetMachineAction->setEnabled(true);
         this->m_pauseMachineAction->setEnabled(true);
-    } else if(state == Machine::Stopped) {
+    } else if (state == Machine::Stopped) {
         this->m_startMachineAction->setEnabled(true);
         this->m_stopMachineAction->setEnabled(false);
         this->m_resetMachineAction->setEnabled(false);
         this->m_pauseMachineAction->setEnabled(false);
-    } else if(state == Machine::Paused) {
+    } else if (state == Machine::Paused) {
         this->m_startMachineAction->setEnabled(false);
         this->m_stopMachineAction->setEnabled(false);
         this->m_resetMachineAction->setEnabled(false);
@@ -844,7 +865,7 @@ void MainWindow::controlMachineActions(Machine::States state)
 void MainWindow::updateMachineDetailsConfig(const QUuid machineUuid)
 {
     foreach (Machine *machine, this->m_machinesList) {
-        if (machine->getUuid() == machineUuid){
+        if (machine->getUuid() == machineUuid) {
             this->fillMachineDetailsSection(machine);
             break;
         }

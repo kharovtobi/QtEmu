@@ -27,23 +27,28 @@
  *
  * This is the heart of the application
  */
-Machine::Machine(QObject *parent) : QObject(parent)
+Machine::Machine(QObject *parent)
+    : QObject(parent)
 {
     this->m_machineProcess = new QProcess(this);
 
 #ifdef Q_OS_WIN
     this->m_machineTcpSocket = new QTcpSocket(this);
-    connect(m_machineTcpSocket, &QTcpSocket::readyRead,
-            this, &Machine::readMachineStandardOut);
+    connect(m_machineTcpSocket, &QTcpSocket::readyRead, this, &Machine::readMachineStandardOut);
 #endif
-    connect(m_machineProcess, &QProcess::readyReadStandardOutput,
-            this, &Machine::readMachineStandardOut);
-    connect(m_machineProcess, &QProcess::readyReadStandardError,
-            this, &Machine::readMachineErrorOut);
-    connect(m_machineProcess, &QProcess::started,
-            this, &Machine::machineStarted);
-    connect(m_machineProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            this, &Machine::machineFinished);
+    connect(m_machineProcess,
+            &QProcess::readyReadStandardOutput,
+            this,
+            &Machine::readMachineStandardOut);
+    connect(m_machineProcess,
+            &QProcess::readyReadStandardError,
+            this,
+            &Machine::readMachineErrorOut);
+    connect(m_machineProcess, &QProcess::started, this, &Machine::machineStarted);
+    connect(m_machineProcess,
+            QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            this,
+            &Machine::machineFinished);
 
     qDebug() << "Machine object created";
 }
@@ -272,13 +277,13 @@ void Machine::setCPUType(const QString &value)
 }
 
 /**
- * @brief Get the CPU Count of the machine
+ * @brief Get the CPU CoreCount of the machine
  *
- * Get the CPU Count of the machine
+ * Get the CPU Core Count of the machine
  */
-int Machine::getCPUCount() const
+int Machine::getCPUCoreCount() const
 {
-    return CPUCount;
+    return CPUCoreCount;
 }
 
 /**
@@ -286,9 +291,29 @@ int Machine::getCPUCount() const
  *
  * Set the CPU Count of the machine
  */
-void Machine::setCPUCount(const int &value)
+void Machine::setCPUCoreCount(const int &value)
 {
-    CPUCount = value;
+    CPUCoreCount = value;
+}
+
+/**
+ * @brief Get the CPU Thread Count of the machine
+ *
+ * Get the CPU Count of the machine
+ */
+int Machine::getCPUThreadCount() const
+{
+    return CPUThreadCount;
+}
+
+/**
+ * @brief Set the CPU Thread Count of the machine
+ *
+ * Set the CPU Count of the machine
+ */
+void Machine::setCPUThreadCount(const int &value)
+{
+    CPUThreadCount = value;
 }
 
 /**
@@ -413,6 +438,28 @@ QString Machine::getKeyboard() const
 void Machine::setKeyboard(const QString &value)
 {
     keyboard = value;
+}
+
+/**
+ * @brief Get the UI display of the machine
+ *
+ * Get the display of the machine
+ * Ex: gtk, sdl, spice...
+ */
+QString Machine::getDisplay() const
+{
+    return display;
+}
+
+/**
+ * @brief Set the UI display of the machine
+ *
+ * Set the display of the machine
+ * Ex: gtk, sdl, spice...
+ */
+void Machine::setDisplay(const QString &value)
+{
+    display = value;
 }
 
 /**
@@ -633,7 +680,7 @@ void Machine::addAccelerator(const QString accel)
  */
 void Machine::removeAccelerator(const QString accel)
 {
-    if(this->accelerator.contains(accel)){
+    if (this->accelerator.contains(accel)) {
         this->accelerator.removeOne(accel);
     }
 }
@@ -669,7 +716,7 @@ QString Machine::getAudioLabel()
 {
     QHash<QString, QString> soundCardsHash = SystemUtils::getSoundCards();
     QStringList audioCards = this->audio;
-    for(int i = 0; i < audioCards.size(); ++i) {
+    for (int i = 0; i < audioCards.size(); ++i) {
         audioCards.replace(i, soundCardsHash.value(audioCards.at(i)));
     }
     QString audioLabel = audioCards.join(",");
@@ -688,7 +735,7 @@ QString Machine::getAcceleratorLabel()
 {
     QHash<QString, QString> acceleratorsHash = SystemUtils::getAccelerators();
     QStringList accel = this->accelerator;
-    for(int i = 0; i < accel.size(); ++i) {
+    for (int i = 0; i < accel.size(); ++i) {
         accel.replace(i, acceleratorsHash.value(accel.at(i)));
     }
     QString acceleratorLabel = accel.join(",");
@@ -706,18 +753,18 @@ void Machine::runMachine(QEMU *QEMUGlobalObject)
     QStringList args = this->generateMachineCommand();
 
     QString program;
-    #ifdef Q_OS_LINUX
-    program.append(QEMUGlobalObject->getQEMUBinary("qemu-system-x86_64"));
-    #endif
-    #ifdef Q_OS_WIN
-    program.append(QEMUGlobalObject->getQEMUBinary("qemu-system-x86_64w.exe"));
-    #endif
-    #ifdef Q_OS_MACOS
-    program.append(QEMUGlobalObject->getQEMUBinary("qemu-system-x86_64"));
-    #endif
-    #ifdef Q_OS_FREEBSD
-    program.append(QEMUGlobalObject->getQEMUBinary("qemu-system-x86_64"));
-    #endif
+#ifdef Q_OS_LINUX
+    program.append(QEMUGlobalObject->getQEMUBinary("qemu-3dfx-system-i386"));
+#endif
+#ifdef Q_OS_WIN
+    program.append(QEMUGlobalObject->getQEMUBinary("qemu-system-i386.exe"));
+#endif
+#ifdef Q_OS_MACOS
+    program.append(QEMUGlobalObject->getQEMUBinary("qemu-3dfx-system-x86_64"));
+#endif
+#ifdef Q_OS_FREEBSD
+    program.append(QEMUGlobalObject->getQEMUBinary("qemu-3dfx-system-x86_64"));
+#endif
 
     if (program.isEmpty()) {
         SystemUtils::showMessage(tr("QEMU - Binary not found"),
@@ -788,7 +835,6 @@ void Machine::resetMachine()
 void Machine::pauseMachine()
 {
     if (state == Machine::Started) {
-
 #ifdef Q_OS_WIN
         if (this->m_machineTcpSocket->state() != QAbstractSocket::ConnectedState) {
             this->failConnectMachine();
@@ -802,7 +848,6 @@ void Machine::pauseMachine()
 
         emit(machineStateChangedSignal(Machine::Paused));
     } else if (state == Machine::Paused) {
-
 #ifdef Q_OS_WIN
         if (this->m_machineTcpSocket->state() != QAbstractSocket::ConnectedState) {
             this->failConnectMachine();
@@ -833,15 +878,12 @@ void Machine::readMachineStandardOut()
     // Remove space characters, included \r \t \n
     cleanStandardOut = cleanStandardOut.simplified();
 
-    if (cleanStandardOut.isEmpty() ||
-        cleanStandardOut.contains("(qemu)") ||
-        cleanStandardOut.contains("monitor")) {
+    if (cleanStandardOut.isEmpty() || cleanStandardOut.contains("(qemu)")
+        || cleanStandardOut.contains("monitor")) {
         return;
     }
 
-    SystemUtils::showMessage(tr("QEMU - Standard Out"),
-                             cleanStandardOut,
-                             QMessageBox::Information);
+    SystemUtils::showMessage(tr("QEMU - Standard Out"), cleanStandardOut, QMessageBox::Information);
 }
 
 /**
@@ -857,10 +899,8 @@ void Machine::readMachineErrorOut()
     QString errorOutput = rawErrorOutput;
     if (errorOutput.isEmpty()) {
         return;
-    }   
-    SystemUtils::showMessage(tr("QEMU - Error Out"),
-                             errorOutput,
-                             QMessageBox::Critical);
+    }
+    SystemUtils::showMessage(tr("QEMU - Error Out"), errorOutput, QMessageBox::Critical);
 }
 
 /**
@@ -896,16 +936,17 @@ QStringList Machine::generateMachineCommand()
 {
     QStringList qemuCommand;
 
-    #ifdef Q_OS_WIN
+#ifdef Q_OS_WIN
     QSettings settings;
     settings.beginGroup("Configuration");
-    qemuCommand << "-monitor" << QString("tcp:%1:%2,server,nowait")
-                                        .arg(settings.value("qemuMonitorHost", "localhost").toString())
-                                        .arg(settings.value("qemuMonitorPort", 6000).toInt());
+    qemuCommand << "-monitor"
+                << QString("tcp:%1:%2,server,nowait")
+                       .arg(settings.value("qemuMonitorHost", "localhost").toString())
+                       .arg(settings.value("qemuMonitorPort", 6000).toInt());
     settings.endGroup();
-    #else
+#else
     qemuCommand << "-monitor" << "stdio";
-    #endif
+#endif
 
     qemuCommand << "-name";
     qemuCommand << this->name;
@@ -923,7 +964,7 @@ QStringList Machine::generateMachineCommand()
     bool firstAccel = true;
     QStringListIterator accelIterator(this->accelerator);
     while (accelIterator.hasNext()) {
-        if(firstAccel) {
+        if (firstAccel) {
             firstAccel = false;
         } else {
             accelerators.append(", ");
@@ -940,6 +981,8 @@ QStringList Machine::generateMachineCommand()
     while (audioIterator.hasNext()) {
         qemuCommand << "-device";
         qemuCommand << audioIterator.next();
+
+
     }
 
     QString bootOrder;
@@ -982,13 +1025,18 @@ QStringList Machine::generateMachineCommand()
     qemuCommand << "-cpu";
     qemuCommand << this->CPUType;
 
-    QString cpuArgs(QString::number(this->CPUCount));
+    qemuCommand << "-display";
+    qemuCommand << this->display;
+
+    QString cpuCoreArgs(QString::number(this->CPUCoreCount));
+    QString cpuThreadArgs(QString::number(this->CPUThreadCount));
 
     qemuCommand << "-smp";
-    qemuCommand << cpuArgs;
+    qemuCommand << "cores=" + cpuCoreArgs + ",threads=" + cpuThreadArgs;
 
     QString machinePath = this->path;
-    QString pipe = QDir::toNativeSeparators(machinePath.append("/").append(this->name).append(".pid"));
+    QString pipe = QDir::toNativeSeparators(
+        machinePath.append("/").append(this->name).append(".pid"));
 
     qemuCommand << "-pidfile";
     qemuCommand << pipe;
@@ -1028,7 +1076,8 @@ void Machine::failConnectMachine()
     m_failConnectErrorMessageBox = new QMessageBox();
     m_failConnectErrorMessageBox->setWindowTitle(tr("QEMU - Connection"));
     m_failConnectErrorMessageBox->setIcon(QMessageBox::Critical);
-    m_failConnectErrorMessageBox->setWindowIcon(QIcon::fromTheme("qtemu", QIcon(":/images/qtemu.png")));
+    m_failConnectErrorMessageBox->setWindowIcon(
+        QIcon::fromTheme("qtemu", QIcon(":/images/qtemu.png")));
     m_failConnectErrorMessageBox->setText(tr("Fail to send command to the QEMU machine"));
     m_failConnectErrorMessageBox->show();
     m_failConnectErrorMessageBox->raise();
@@ -1048,38 +1097,41 @@ bool Machine::saveMachine()
 {
     QFile machineFile(this->configPath);
     if (!machineFile.open(QFile::WriteOnly)) {
-        SystemUtils::showMessage(tr("Qtemu - Critical error"),
-                                 tr("<p>Cannot save the machine</p>"
-                                    "<p>The file with the machine configuration are not writable</p>"),
-                                 QMessageBox::Critical);
+        SystemUtils::showMessage(
+            tr("Qtemu - Critical error"),
+            tr("<p>Cannot save the machine</p>"
+               "<p>The file with the machine configuration are not writable</p>"),
+            QMessageBox::Critical);
         return false;
     }
 
     QJsonObject machineJSONObject;
-    machineJSONObject["name"]        = this->name;
-    machineJSONObject["OSType"]      = this->OSType;
-    machineJSONObject["OSVersion"]   = this->OSVersion;
-    machineJSONObject["type"]        = this->type;
+    machineJSONObject["name"] = this->name;
+    machineJSONObject["OSType"] = this->OSType;
+    machineJSONObject["OSVersion"] = this->OSVersion;
+    machineJSONObject["type"] = this->type;
     machineJSONObject["description"] = this->description;
-    machineJSONObject["RAM"]         = this->RAM;
-    machineJSONObject["network"]     = this->useNetwork;
-    machineJSONObject["path"]        = QDir::toNativeSeparators(this->path);
-    machineJSONObject["uuid"]        = this->uuid.toString(QUuid::WithoutBraces);
+    machineJSONObject["RAM"] = this->RAM;
+    machineJSONObject["network"] = this->useNetwork;
+    machineJSONObject["path"] = QDir::toNativeSeparators(this->path);
+    machineJSONObject["uuid"] = this->uuid.toString(QUuid::WithoutBraces);
     machineJSONObject["hostsoundsystem"] = this->hostSoundSystem;
-    machineJSONObject["binary"] = "qemu-system-x86_64";
+    machineJSONObject["binary"] = "qemu-3dfx-system-i386";
 
     QJsonObject cpu;
-    cpu["CPUType"]     = this->CPUType;
-    cpu["CPUCount"]    = this->CPUCount;
+    cpu["CPUType"] = this->CPUType;
+    cpu["CPUCoreCount"] = this->CPUCoreCount;
+    cpu["CPUThreadCount"] = this->CPUThreadCount;
     cpu["socketCount"] = this->socketCount;
     cpu["coresSocket"] = this->coresSocket;
     cpu["threadsCore"] = this->threadsCore;
-    cpu["maxHotCPU"]   = this->maxHotCPU;
+    cpu["maxHotCPU"] = this->maxHotCPU;
     machineJSONObject["cpu"] = cpu;
 
     QJsonObject gpu;
-    gpu["GPUType"]  = this->GPUType;
+    gpu["GPUType"] = this->GPUType;
     gpu["keyboard"] = this->keyboard;
+    gpu["display"] = this->display;
     machineJSONObject["gpu"] = gpu;
 
     QJsonArray media;
@@ -1136,17 +1188,20 @@ void Machine::insertMachineConfigFile()
 {
     QSettings settings;
     settings.beginGroup("DataFolder");
-    QString dataDirectoryPath = settings.value("QtEmuData",
-                                               QDir::toNativeSeparators(QDir::homePath() + "/.qtemu/")).toString();
+    QString dataDirectoryPath = settings
+                                    .value("QtEmuData",
+                                           QDir::toNativeSeparators(QDir::homePath() + "/.qtemu/"))
+                                    .toString();
     settings.endGroup();
     QString qtemuConfig = dataDirectoryPath.append("qtemu.json");
 
     QFile machinesFile(qtemuConfig);
     if (!machinesFile.open(QFile::ReadWrite)) {
-        SystemUtils::showMessage(tr("Qtemu - Critical error"),
-                                 tr("<p>Cannot save the machine</p>"
-                                    "<p>The file with all the machines configuration are not writable</p>"),
-                                 QMessageBox::Critical);
+        SystemUtils::showMessage(
+            tr("Qtemu - Critical error"),
+            tr("<p>Cannot save the machine</p>"
+               "<p>The file with all the machines configuration are not writable</p>"),
+            QMessageBox::Critical);
         return;
     }
 
@@ -1160,10 +1215,10 @@ void Machine::insertMachineConfigFile()
 
     // Create the new machine
     QJsonObject machine;
-    machine["uuid"]       = this->uuid.toString();
-    machine["path"]       = QDir::toNativeSeparators(this->path);
+    machine["uuid"] = this->uuid.toString();
+    machine["path"] = QDir::toNativeSeparators(this->path);
     machine["configpath"] = QDir::toNativeSeparators(this->configPath);
-    machine["icon"]       = this->OSVersion.toLower().replace(" ", "_");
+    machine["icon"] = this->OSVersion.toLower().replace(" ", "_");
 
     machines.append(machine);
     machinesObject["machines"] = machines;

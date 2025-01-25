@@ -78,8 +78,10 @@ void MachineConfigHardware::saveHardwareData()
 {
     this->m_machine->setType(this->m_machineTypeTab->getMachineType());
     this->m_machine->setCPUType(this->m_processorConfigTab->getCPUType());
-    this->m_machine->setCPUCount(this->m_processorConfigTab->getCPUCount());
+    this->m_machine->setCPUCoreCount(this->m_processorConfigTab->getCPUCoreCount());
+    this->m_machine->setCPUThreadCount(this->m_processorConfigTab->getCPUThreadCount());
     this->m_machine->setGPUType(this->m_graphicsConfigTab->getGPUType());
     this->m_machine->setKeyboard(this->m_graphicsConfigTab->getKeyboardLayout());
+    this->m_machine->setDisplay(this->m_graphicsConfigTab->getDisplayType());
     this->m_machine->setRAM(this->m_ramConfigTab->getAmountRam());
 }

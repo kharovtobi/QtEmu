@@ -23,35 +23,34 @@
 #define QEMU_H
 
 // Qt
-#include <QObject>
 #include <QDirIterator>
 #include <QFile>
-#include <QMap>
-#include <QSettings>
 #include <QJsonDocument>
+#include <QMap>
+#include <QObject>
+#include <QSettings>
 
 #include <QDebug>
 
-class QEMU : public QObject {
+class QEMU : public QObject
+{
     Q_OBJECT
 
-    public:
-        explicit QEMU(QObject *parent = nullptr);
-        ~QEMU();
+public:
+    explicit QEMU(QObject *parent = nullptr);
+    ~QEMU();
 
-        QString QEMUImgPath() const;
-        void setQEMUImgPath(const QString path);
+    QString QEMUImgPath() const;
+    void setQEMUImgPath(const QString path);
 
-        QMap<QString, QString> QEMUBinaries() const;
-        QString getQEMUBinary(const QString binary) const;
-        void setQEMUBinaries(const QString path);
+    QMap<QString, QString> QEMUBinaries() const;
+    QString getQEMUBinary(const QString binary) const;
+    void setQEMUBinaries(const QString path);
 
-    protected:
-
-    private:
-        QString m_QEMUImgPath;
-        QMap<QString, QString> m_QEMUBinaries;
-
+protected:
+private:
+    QString m_QEMUImgPath;
+    QMap<QString, QString> m_QEMUBinaries;
 };
 
 #endif // QEMU_H

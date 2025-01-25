@@ -71,13 +71,15 @@ class ProcessorTab: public QWidget {
 
     public slots:
         void selectProcessor(int index);
-        void selectCPUCount(int CPUCount);
+        void selectCPUCoreCount(int CPUCoreCount);
+        void selectCPUThreadCount(int CPUThreadCount);
 
     protected:
 
     private:
         QHBoxLayout *m_CPUTypeLayout;
-        QHBoxLayout *m_CPUCountLayout;
+        QHBoxLayout *m_CPUCoreCountLayout;
+        QHBoxLayout *m_CPUThreadCountLayout;
         QVBoxLayout *m_CPUSettingsLayout;
         QVBoxLayout *m_processorLayout;
 
@@ -86,7 +88,8 @@ class ProcessorTab: public QWidget {
         QGroupBox *m_CPUSettings;
 
         QLabel *m_CPUTypeLabel;
-        QLabel *m_CPUCountLabel;
+        QLabel *m_CPUCoreCountLabel;
+        QLabel *m_CPUThreadCountLabel;
 
         QSpinBox *m_CPUCountSpinBox;
 

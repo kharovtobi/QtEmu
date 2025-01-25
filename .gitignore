@@ -151,6 +151,8 @@ build.ninja
 .ninja_deps
 .ninja_logs
 
+# Build files
+/build
 # Misc
 
 ### QtCreator ###

@@ -97,10 +97,6 @@ MachineConfigWindow::MachineConfigWindow(Machine *machine,
     m_optionsListWidget->item(6)->setIcon(QIcon::fromTheme("mathematica",
                                                            QIcon(QPixmap(":/images/icons/breeze/32x32/mathematica.svg"))));
 
-    /*m_optionsListWidget->addItem(tr("Display"));
-    m_optionsListWidget->item(7)->setIcon(QIcon::fromTheme("applications-multimedia",
-                                                           QIcon(QPixmap(":/images/icons/breeze/32x32/.svg"))));*/
-
     // Prepare window
     m_optionsStackedWidget = new QStackedWidget(this);
     m_optionsStackedWidget->setSizePolicy(QSizePolicy::Expanding,

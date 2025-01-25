@@ -35,7 +35,8 @@
 MachineWizard::MachineWizard(Machine *machine,
                              QListWidget *osListWidget,
                              QEMU *QEMUGlobalObject,
-                             QWidget *parent) : QWizard(parent)
+                             QWidget *parent)
+    : QWizard(parent)
 {
     this->setWindowTitle(tr("Create a new Machine"));
 
@@ -45,17 +46,18 @@ MachineWizard::MachineWizard(Machine *machine,
     this->setPage(Page_Accelerator, new MachineAcceleratorPage(machine, this));
     this->setPage(Page_Memory, new MachineMemoryPage(machine, this));
     this->setPage(Page_Disk, new MachineDiskPage(machine, this));
-    this->setPage(Page_New_Disk, new MachineNewDiskPage(machine ,this));
-    this->setPage(Page_Conclusion, new MachineConclusionPage(machine, osListWidget, QEMUGlobalObject, this));
+    this->setPage(Page_New_Disk, new MachineNewDiskPage(machine, this));
+    this->setPage(Page_Conclusion,
+                  new MachineConclusionPage(machine, osListWidget, QEMUGlobalObject, this));
 
     this->setStartId(Page_Name);
 
-    #ifndef Q_OS_MAC
-        this->setWizardStyle(ClassicStyle);
-    #endif
-    #ifdef Q_OS_MAC
-        this->setWizardStyle(MacStyle);
-    #endif
+#ifndef Q_OS_MAC
+    this->setWizardStyle(ClassicStyle);
+#endif
+#ifdef Q_OS_MAC
+    this->setWizardStyle(MacStyle);
+#endif
 
     this->setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/banner.png"));
     this->setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/banner.png"));

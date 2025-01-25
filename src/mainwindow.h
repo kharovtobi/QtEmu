@@ -23,153 +23,152 @@
 #define MAINWINDOW_H
 
 // Qt
-#include <QMainWindow>
-#include <QtNetwork>
-#include <QSettings>
-#include <QApplication>
-#include <QMenu>
-#include <QMenuBar>
 #include <QAction>
-#include <QDesktopServices>
-#include <QToolBar>
+#include <QApplication>
 #include <QDebug>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QWidget>
-#include <QListWidget>
-#include <QListWidgetItem>
-#include <QStackedWidget>
+#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
-#include <QProcess>
+#include <QHBoxLayout>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
 #include <QMessageBox>
+#include <QProcess>
+#include <QSettings>
+#include <QStackedWidget>
+#include <QToolBar>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <QtNetwork>
 
 // Local
-#include "machine.h"
-#include "machineutils.h"
-#include "machineconfig/machineconfigwindow.h"
-#include "helpwidget.h"
 #include "aboutwidget.h"
 #include "configwindow.h"
-#include "machinewizard.h"
-#include "qemu.h"
 #include "export-import/export.h"
 #include "export-import/import.h"
+#include "helpwidget.h"
+#include "machine.h"
+#include "machineconfig/machineconfigwindow.h"
+#include "machineutils.h"
+#include "machinewizard.h"
+#include "qemu.h"
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
-    public:
-        MainWindow(QWidget *parent = nullptr);
-        ~MainWindow();
+public:
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
 
-        void createMenus();
-        void createMenusActions();
-        void createToolBars();
+    void createMenus();
+    void createMenusActions();
+    void createToolBars();
 
-    public slots:
+public slots:
 
-    private slots:
-        void visitQtEmuWebsite();
-        void visitQtEmuBugTracker();
-        void visitQemuWebsite();
-        void checkVersions();
-        void quitApp();
-        void createNewMachine();
-        void machineOptions();
-        void exportMachine();
-        void importMachine();
-        void runMachine();
-        void resetMachine();
-        void pauseMachine();
-        void deleteMachine();
-        void loadUI(const int machineCount);
-        void changeMachine(QListWidgetItem *machineItem);
-        void machineStateChanged(Machine::States newState);
-        void machinesMenu(const QPoint &pos);
-        void updateMachineDetailsConfig(const QUuid machineUuid);
+private slots:
+    void visitQtEmuWebsite();
+    void visitQtEmuBugTracker();
+    void visitQemuWebsite();
+    void checkVersions();
+    void quitApp();
+    void createNewMachine();
+    void machineOptions();
+    void exportMachine();
+    void importMachine();
+    void runMachine();
+    void resetMachine();
+    void pauseMachine();
+    void deleteMachine();
+    void loadUI(const int machineCount);
+    void changeMachine(QListWidgetItem *machineItem);
+    void machineStateChanged(Machine::States newState);
+    void machinesMenu(const QPoint &pos);
+    void updateMachineDetailsConfig(const QUuid machineUuid);
 
-    protected:
+protected:
+private:
+    // Start menus
+    QMenu *m_fileMenu;
+    QMenu *m_machineMenu;
+    QMenu *m_helpMenu;
 
-    private:
-        // Start menus
-        QMenu *m_fileMenu;
-        QMenu *m_machineMenu;
-        QMenu *m_helpMenu;
+    QAction *m_exitAppAction;
+    QAction *m_checkUpdateAppAction;
+    QAction *m_preferencesAppAction;
 
-        QAction *m_exitAppAction;
-        QAction *m_checkUpdateAppAction;
-        QAction *m_preferencesAppAction;
+    QAction *m_newMachineAction;
+    QAction *m_addMachineAction;
+    QAction *m_settingsMachineAction;
+    QAction *m_exportMachineAction;
+    QAction *m_importMachineAction;
+    QAction *m_removeMachineAction;
+    QAction *m_groupMachineAction;
 
-        QAction *m_newMachineAction;
-        QAction *m_addMachineAction;
-        QAction *m_settingsMachineAction;
-        QAction *m_exportMachineAction;
-        QAction *m_importMachineAction;
-        QAction *m_removeMachineAction;
-        QAction *m_groupMachineAction;
+    QAction *m_helpQuickHelpAction;
+    QAction *m_helpQtEmuWebsiteAction;
+    QAction *m_helpQtEmuBugTrackerAction;
+    QAction *m_helpQemuWebsiteAction;
+    QAction *m_helpAboutAction;
 
-        QAction *m_helpQuickHelpAction;
-        QAction *m_helpQtEmuWebsiteAction;
-        QAction *m_helpQtEmuBugTrackerAction;
-        QAction *m_helpQemuWebsiteAction;
-        QAction *m_helpAboutAction;
+    QAction *m_startMachineAction;
+    QAction *m_stopMachineAction;
+    QAction *m_resetMachineAction;
+    QAction *m_pauseMachineAction;
+    // End menus
 
-        QAction *m_startMachineAction;
-        QAction *m_stopMachineAction;
-        QAction *m_resetMachineAction;
-        QAction *m_pauseMachineAction;
-        // End menus
+    // Toolbar
+    QToolBar *m_mainToolBar;
 
-        // Toolbar
-        QToolBar *m_mainToolBar;
+    // Widgets
+    QWidget *m_mainWidget;
+    MachineConfigWindow *m_machineConfigWindow;
+    ConfigWindow *m_configWindow;
+    HelpWidget *m_helpwidget;
+    AboutWidget *m_aboutwidget;
 
-        // Widgets
-        QWidget *m_mainWidget;
-        MachineConfigWindow *m_machineConfigWindow;
-        ConfigWindow *m_configWindow;
-        HelpWidget *m_helpwidget;
-        AboutWidget *m_aboutwidget;
+    // Layouts
+    QVBoxLayout *m_mainLayout;
+    QHBoxLayout *m_containerLayout;
+    QVBoxLayout *m_groupContainerLayout;
+    QFormLayout *m_machineDetailsLayout;
 
-        // Layouts
-        QVBoxLayout *m_mainLayout;
-        QHBoxLayout *m_containerLayout;
-        QVBoxLayout *m_groupContainerLayout;
-        QFormLayout *m_machineDetailsLayout;
+    QGroupBox *m_machineDetailsGroup;
+    QGroupBox *m_hardwareGroup;
+    QGroupBox *m_devicesGroup;
+    QGroupBox *m_networkGroup;
 
-        QGroupBox *m_machineDetailsGroup;
-        QGroupBox *m_hardwareGroup;
-        QGroupBox *m_devicesGroup;
-        QGroupBox *m_networkGroup;
+    // List of OS
+    QListWidget *m_osListWidget;
+    QStackedWidget *m_osDetailsStackedWidget;
+    QList<Machine *> m_machinesList;
 
-        // List of OS
-        QListWidget *m_osListWidget;
-        QStackedWidget *m_osDetailsStackedWidget;
-        QList<Machine *> m_machinesList;
+    // Machine
+    Machine *m_machine;
 
-        // Machine
-        Machine *m_machine;
+    // Labels
+    QLabel *m_machineNameLabel;
+    QLabel *m_machineOsLabel;
+    QLabel *m_machineCPULabel;
+    QLabel *m_machineRAMLabel;
+    QLabel *m_machineGraphicsLabel;
+    QLabel *m_machineAudioLabel;
+    QLabel *m_machineAccelLabel;
+    QLabel *m_machineNetworkLabel;
+    QLabel *m_machineMediaLabel;
 
-        // Labels
-        QLabel *m_machineNameLabel;
-        QLabel *m_machineOsLabel;
-        QLabel *m_machineCPULabel;
-        QLabel *m_machineRAMLabel;
-        QLabel *m_machineGraphicsLabel;
-        QLabel *m_machineAudioLabel;
-        QLabel *m_machineAccelLabel;
-        QLabel *m_machineNetworkLabel;
-        QLabel *m_machineMediaLabel;
+    // QEMU
+    QEMU *qemuGlobalObject;
 
-        // QEMU
-        QEMU *qemuGlobalObject;
-
-        // Methods
-        void generateMachineObject(const QJsonObject machinesConfigJsonObject, int pos);
-        void loadMachines();
-        void controlMachineActions(Machine::States state);
-        void fillMachineDetailsSection(Machine *machine);
-        void emptyMachineDetailsSection();
-
+    // Methods
+    void generateMachineObject(const QJsonObject machinesConfigJsonObject, int pos);
+    void loadMachines();
+    void controlMachineActions(Machine::States state);
+    void fillMachineDetailsSection(Machine *machine);
+    void emptyMachineDetailsSection();
 };
 #endif // MAINWINDOW_H

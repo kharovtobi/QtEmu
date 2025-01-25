@@ -20,10 +20,11 @@
  */
 
 // Local
-#include "machine.h"
 #include "machineutils.h"
+#include "machine.h"
 
-MachineUtils::MachineUtils(QObject *parent) : QObject(parent)
+MachineUtils::MachineUtils(QObject *parent)
+    : QObject(parent)
 {
     qDebug() << "MachineUtils object created";
 }
@@ -51,9 +52,11 @@ QJsonObject MachineUtils::readMachineFile(QString machinePath)
         machinePathMessageBox->setWindowTitle(tr("Qtemu - Critical error"));
         machinePathMessageBox->setIcon(QMessageBox::Critical);
         machinePathMessageBox->setWindowIcon(QIcon::fromTheme("qtemu", QIcon(":/images/qtemu.png")));
-        machinePathMessageBox->setText(tr(qPrintable(QString("<p>Cannot load the machine</p>"
-                                                               "<p>Cannot open the <strong>%1</strong> file. "
-                                                               "Please ensure that the file exists and it's readable</p>").arg(machinePath))));
+        machinePathMessageBox->setText(
+            tr(qPrintable(QString("<p>Cannot load the machine</p>"
+                                  "<p>Cannot open the <strong>%1</strong> file. "
+                                  "Please ensure that the file exists and it's readable</p>")
+                              .arg(machinePath))));
         machinePathMessageBox->exec();
         return machineJSON;
     }
@@ -79,7 +82,8 @@ QJsonObject MachineUtils::readMachineFile(QString machinePath)
  * Fill the machine object with the data
  */
 void MachineUtils::fillMachineObject(Machine *machine,
-                                     QJsonObject machineJSON, QString machineConfigPath)
+                                     QJsonObject machineJSON,
+                                     QString machineConfigPath)
 {
     QJsonObject gpuObject = machineJSON["gpu"].toObject();
     QJsonObject cpuObject = machineJSON["cpu"].toObject();
@@ -95,7 +99,7 @@ void MachineUtils::fillMachineObject(Machine *machine,
     machineBoot->setKernelArgs(kernelObject["kernelArgs"].toString());
     machineBoot->setBootOrder(MachineUtils::getMediaDevices(bootObject["bootOrder"].toArray()));
 
-    for(int i = 0; i < mediaArray.size(); ++i) {
+    for (int i = 0; i < mediaArray.size(); ++i) {
         QJsonObject mediaObject = mediaArray[i].toObject();
 
         Media *media = new Media(machine);
@@ -120,8 +124,10 @@ void MachineUtils::fillMachineObject(Machine *machine,
     machine->setUuid(QUuid(machineJSON["uuid"].toString()));
     machine->setGPUType(gpuObject["GPUType"].toString());
     machine->setKeyboard(gpuObject["keyboard"].toString());
+    machine->setDisplay(gpuObject["display"].toString());
     machine->setCPUType(cpuObject["CPUType"].toString());
-    machine->setCPUCount(cpuObject["CPUCount"].toInt());
+    machine->setCPUCoreCount(cpuObject["CPUCoreCount"].toInt());
+    machine->setCPUThreadCount(cpuObject["CPUThreadCount"].toInt());
     machine->setCoresSocket(cpuObject["coresSocket"].toInt());
     machine->setMaxHotCPU(cpuObject["maxHotCPU"].toInt());
     machine->setSocketCount(cpuObject["socketCount"].toInt());
@@ -143,8 +149,10 @@ bool MachineUtils::deleteMachine(const QUuid machineUuid)
 {
     QSettings settings;
     settings.beginGroup("DataFolder");
-    QString dataDirectoryPath = settings.value("QtEmuData",
-                                               QDir::toNativeSeparators(QDir::homePath() + "/.qtemu/")).toString();
+    QString dataDirectoryPath = settings
+                                    .value("QtEmuData",
+                                           QDir::toNativeSeparators(QDir::homePath() + "/.qtemu/"))
+                                    .toString();
     settings.endGroup();
 
     // Open the file with the machines
@@ -154,9 +162,11 @@ bool MachineUtils::deleteMachine(const QUuid machineUuid)
         QMessageBox *m_deleteMachineMessageBox = new QMessageBox();
         m_deleteMachineMessageBox->setWindowTitle(tr("Qtemu - Critical error"));
         m_deleteMachineMessageBox->setIcon(QMessageBox::Critical);
-        m_deleteMachineMessageBox->setWindowIcon(QIcon::fromTheme("qtemu", QIcon(":/images/qtemu.png")));
-        m_deleteMachineMessageBox->setText(tr("<p>Cannot delete the machine</p>"
-                                              "<p>The file with the machines configuration are not readable</p>"));
+        m_deleteMachineMessageBox->setWindowIcon(
+            QIcon::fromTheme("qtemu", QIcon(":/images/qtemu.png")));
+        m_deleteMachineMessageBox->setText(
+            tr("<p>Cannot delete the machine</p>"
+               "<p>The file with the machines configuration are not readable</p>"));
         m_deleteMachineMessageBox->exec();
         return false;
     }
@@ -169,7 +179,7 @@ bool MachineUtils::deleteMachine(const QUuid machineUuid)
     int machinePos = 0;
     bool machineExists = false;
     QString machinePath;
-    while(machinePos < machines.size() && ! machineExists) {
+    while (machinePos < machines.size() && !machineExists) {
         QJsonObject machineJSON = machines[machinePos].toObject();
         if (machineUuid.toString() == machineJSON["uuid"].toVariant()) {
             machineExists = true;
@@ -210,7 +220,7 @@ bool MachineUtils::deleteMachine(const QUuid machineUuid)
 QStringList MachineUtils::getSoundCards(QJsonArray soundCardsArray)
 {
     QStringList soundCardsList;
-    for(int i = 0; i < soundCardsArray.size(); ++i) {
+    for (int i = 0; i < soundCardsArray.size(); ++i) {
         soundCardsList.append(soundCardsArray[i].toString());
     }
 
@@ -227,7 +237,7 @@ QStringList MachineUtils::getSoundCards(QJsonArray soundCardsArray)
 QStringList MachineUtils::getAccelerators(QJsonArray acceleratorsArray)
 {
     QStringList acceleratorsList;
-    for(int i = 0; i < acceleratorsArray.size(); ++i) {
+    for (int i = 0; i < acceleratorsArray.size(); ++i) {
         acceleratorsList.append(acceleratorsArray[i].toString());
     }
 
@@ -244,7 +254,7 @@ QStringList MachineUtils::getAccelerators(QJsonArray acceleratorsArray)
 QStringList MachineUtils::getMediaDevices(QJsonArray mediaDevicesArray)
 {
     QStringList mediaDevicesList;
-    for(int i= 0; i < mediaDevicesArray.size(); ++i) {
+    for (int i = 0; i < mediaDevicesArray.size(); ++i) {
         mediaDevicesList.append(mediaDevicesArray[i].toString());
     }
 

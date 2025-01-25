@@ -21,10 +21,10 @@
 
 // Qt
 #include <QApplication>
-#include <QTranslator>
-#include <QLibraryInfo>
-#include <QDir>
 #include <QCoreApplication>
+#include <QDir>
+#include <QLibraryInfo>
+#include <QTranslator>
 
 // C++ standard library
 #include <iostream>
@@ -32,33 +32,31 @@
 // Local
 #include "mainwindow.h"
 #include "qemu.h"
-#include "utils/logger.h"
 #include "utils/firstrunwizard.h"
+#include "utils/logger.h"
 
 int main(int argc, char *argv[])
 {
     QApplication qtemuApp(argc, argv);
     qtemuApp.setApplicationName("QtEmu");
-    qtemuApp.setApplicationVersion("2.2");
+    qtemuApp.setApplicationVersion("2.2a");
     qtemuApp.setOrganizationName("QtEmu");
     qtemuApp.setOrganizationDomain("https://www.qtemu.org");
 
     std::cout << QString("QtEmu v%1 # QtEmu Developers")
-                        .arg(qtemuApp.applicationVersion()).toStdString();
+                     .arg(qtemuApp.applicationVersion())
+                     .toStdString();
 
-    std::cout << QString("- Built with Qt v%1").arg(QT_VERSION_STR)
-                                               .toStdString();
+    std::cout << QString("- Built with Qt v%1").arg(QT_VERSION_STR).toStdString();
 
-    /*
+/*
      * REPRODUCIBLEBUILD is defined via .pro file when SOURCE_DATE_EPOCH is
      * defined in the build environment. This is used to avoid hardcoding
      * timestamps and this way make the builds reproducible.
      */
-    #ifndef REPRODUCIBLEBUILD
-        std::cout << QString(" on %1, %2")
-                     .arg(__DATE__)
-                     .arg(__TIME__).toStdString();
-    #endif
+#ifndef REPRODUCIBLEBUILD
+    std::cout << QString(" on %1, %2").arg(__DATE__).arg(__TIME__).toStdString();
+#endif
 
     QSettings settings;
 
@@ -101,12 +99,11 @@ int main(int argc, char *argv[])
 
     std::cout << "\n"
               << "Using Qt translation "
-              << QLibraryInfo::location(QLibraryInfo::TranslationsPath).toStdString()
-              << "/"
-              << languageFile.toStdString()
-              << "\n";
+              << QLibraryInfo::location(QLibraryInfo::TranslationsPath).toStdString() << "/"
+              << languageFile.toStdString() << "\n";
 
-    languageLoaded = translatorQt.load(languageFile, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    languageLoaded = translatorQt.load(languageFile,
+                                       QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 
     if (languageLoaded) {
         std::cout << "Language loaded";
@@ -118,9 +115,7 @@ int main(int argc, char *argv[])
     languageFile = QString(":/translations/qtemu_%1").arg(language);
 
     std::cout << "\n"
-              << "Using QtEmu translation "
-              << languageFile.toStdString()
-              << "\n";
+              << "Using QtEmu translation " << languageFile.toStdString() << "\n";
 
     languageLoaded = translatorQtEmu.load(languageFile);
 
@@ -152,8 +147,7 @@ int main(int argc, char *argv[])
     Logger::logQtemuAction(logMessage);
 
     std::cout << "\n";
-    std::cout << QString("- Running with Qt v%1\n\n").arg(qVersion())
-                                                     .toStdString();
+    std::cout << QString("- Running with Qt v%1\n\n").arg(qVersion()).toStdString();
     std::cout.flush();
 
     MainWindow qtemuWindow;

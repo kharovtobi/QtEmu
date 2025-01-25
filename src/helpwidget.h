@@ -24,39 +24,39 @@
 
 // Qt
 
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QTextBrowser>
-#include <QPushButton>
 #include <QAction>
 #include <QCloseEvent>
 #include <QHideEvent>
+#include <QPushButton>
 #include <QSettings>
+#include <QTextBrowser>
+#include <QVBoxLayout>
+#include <QWidget>
 
 #include <QDebug>
 
-class HelpWidget : public QWidget {
+class HelpWidget : public QWidget
+{
     Q_OBJECT
 
-    public:
-        explicit HelpWidget(QWidget *parent = nullptr);
-        ~HelpWidget();
+public:
+    explicit HelpWidget(QWidget *parent = nullptr);
+    ~HelpWidget();
 
-    signals:
+signals:
 
-    public slots:
+public slots:
 
-    protected:
-        virtual void closeEvent(QCloseEvent *event);
-        virtual void hideEvent(QHideEvent *event);
+protected:
+    virtual void closeEvent(QCloseEvent *event);
+    virtual void hideEvent(QHideEvent *event);
 
-    private:
-        QVBoxLayout *m_mainLayout;
-        QTextBrowser *m_helpTextBrowser;
+private:
+    QVBoxLayout *m_mainLayout;
+    QTextBrowser *m_helpTextBrowser;
 
-        QPushButton *m_closeButton;
-        QAction *m_closeAction;
-
+    QPushButton *m_closeButton;
+    QAction *m_closeAction;
 };
 
 #endif // HELPWIDGET_H

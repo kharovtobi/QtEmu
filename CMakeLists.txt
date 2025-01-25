@@ -70,6 +70,8 @@ qt_add_executable(QtEmu WIN32 MACOSX_BUNDLE
     src/utils/logger.cpp src/utils/logger.h
     src/utils/newdiskwizard.cpp src/utils/newdiskwizard.h
     src/utils/systemutils.cpp src/utils/systemutils.h
+
+
 )
 
 target_link_libraries(QtEmu PUBLIC

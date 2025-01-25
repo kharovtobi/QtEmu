@@ -22,197 +22,203 @@
 #define MACHINE_H
 
 // Qt
+#include <QDebug>
+#include <QHash>
+#include <QMessageBox>
 #include <QObject>
 #include <QProcess>
-#include <QTcpSocket>
-#include <QHash>
-#include <QUuid>
-#include <QMessageBox>
 #include <QSettings>
-#include <QDebug>
+#include <QTcpSocket>
+#include <QUuid>
 
 // Local
-#include "qemu.h"
 #include "boot.h"
-#include "media.h"
 #include "machineutils.h"
+#include "media.h"
+#include "qemu.h"
 #include "utils/logger.h"
 
-class Machine: public QObject {
+class Machine : public QObject
+{
     Q_OBJECT
 
-    public:
-        explicit Machine(QObject *parent = nullptr);
-        ~Machine();
+public:
+    explicit Machine(QObject *parent = nullptr);
+    ~Machine();
 
-        enum States {
-            Started, Stopped, Saved, Paused
-        };
+    enum States { Started, Stopped, Saved, Paused };
 
-        QString getName() const;
-        void setName(const QString &value);
+    QString getName() const;
+    void setName(const QString &value);
 
-        QString getOSType() const;
-        void setOSType(const QString &value);
+    QString getOSType() const;
+    void setOSType(const QString &value);
 
-        QString getOSVersion() const;
-        void setOSVersion(const QString &value);
+    QString getOSVersion() const;
+    void setOSVersion(const QString &value);
 
-        QString getType() const;
-        void setType(const QString &value);
+    QString getType() const;
+    void setType(const QString &value);
 
-        QString getPath() const;
-        void setPath(const QString &value);
+    QString getPath() const;
+    void setPath(const QString &value);
 
-        QString getConfigPath() const;
-        void setConfigPath(const QString &value);
+    QString getConfigPath() const;
+    void setConfigPath(const QString &value);
 
-        QUuid getUuid() const;
-        void setUuid(const QUuid &value);
+    QUuid getUuid() const;
+    void setUuid(const QUuid &value);
 
-        QString getDescription() const;
-        void setDescription(const QString &value);
+    QString getDescription() const;
+    void setDescription(const QString &value);
 
-        Machine::States getState() const;
-        void setState(const States &value);
+    Machine::States getState() const;
+    void setState(const States &value);
 
-        QString getCPUType() const;
-        void setCPUType(const QString &value);
+    QString getCPUType() const;
+    void setCPUType(const QString &value);
 
-        int getCPUCount() const;
-        void setCPUCount(const int &value);
+    int getCPUCoreCount() const;
+    void setCPUCoreCount(const int &value);
 
-        int getSocketCount() const;
-        void setSocketCount(const int &value);
+    int getCPUThreadCount() const;
+    void setCPUThreadCount(const int &value);
 
-        int getCoresSocket() const;
-        void setCoresSocket(const int &value);
+    int getSocketCount() const;
+    void setSocketCount(const int &value);
 
-        int getThreadsCore() const;
-        void setThreadsCore(const int &value);
+    int getCoresSocket() const;
+    void setCoresSocket(const int &value);
 
-        int getMaxHotCPU() const;
-        void setMaxHotCPU(const int &value);
+    int getThreadsCore() const;
+    void setThreadsCore(const int &value);
 
-        QString getGPUType() const;
-        void setGPUType(const QString &value);
+    int getMaxHotCPU() const;
+    void setMaxHotCPU(const int &value);
 
-        QString getKeyboard() const;
-        void setKeyboard(const QString &value);
+    QString getGPUType() const;
+    void setGPUType(const QString &value);
 
-        qlonglong getRAM() const;
-        void setRAM(const qlonglong &value);
+    QString getKeyboard() const;
+    void setKeyboard(const QString &value);
 
-        QStringList getAudio() const;
-        void setAudio(const QStringList &value);
+    QString getDisplay() const;
+    void setDisplay(const QString &value);
 
-        QString getHostSoundSystem() const;
-        void setHostSoundSystem(const QString &value);
+    qlonglong getRAM() const;
+    void setRAM(const qlonglong &value);
 
-        bool getUseNetwork() const;
-        void setUseNetwork(bool value);
+    QStringList getAudio() const;
+    void setAudio(const QStringList &value);
 
-        QList<Media *> getMedia() const;
-        void addMedia(Media *media);
+    QString getHostSoundSystem() const;
+    void setHostSoundSystem(const QString &value);
 
-        QStringList getAccelerator() const;
-        void setAccelerator(const QStringList &value);
+    bool getUseNetwork() const;
+    void setUseNetwork(bool value);
 
-        Boot *getBoot() const;
-        void setBoot(Boot *value);
+    QList<Media *> getMedia() const;
+    void addMedia(Media *media);
 
-        // Methods
-        void addAudio(const QString audio);
-        void removeAudio(const QString audio);
-        void removeAllAudioCards();
+    QStringList getAccelerator() const;
+    void setAccelerator(const QStringList &value);
 
-        void addAccelerator(const QString accel);
-        void removeAccelerator(const QString accel);
-        void removeAllAccelerators();
+    Boot *getBoot() const;
+    void setBoot(Boot *value);
 
-        void removeAllMedia();
+    // Methods
+    void addAudio(const QString audio);
+    void removeAudio(const QString audio);
+    void removeAllAudioCards();
 
-        QString getAudioLabel();
-        QString getAcceleratorLabel();
+    void addAccelerator(const QString accel);
+    void removeAccelerator(const QString accel);
+    void removeAllAccelerators();
 
-        void runMachine(QEMU *QEMUGlobalObject);
-        void stopMachine();
-        void resetMachine();
-        void pauseMachine();
-        bool saveMachine();
-        void insertMachineConfigFile();
+    void removeAllMedia();
 
-    signals:
-        void machineStateChangedSignal(States newState);
+    QString getAudioLabel();
+    QString getAcceleratorLabel();
 
-    public slots:
+    void runMachine(QEMU *QEMUGlobalObject);
+    void stopMachine();
+    void resetMachine();
+    void pauseMachine();
+    bool saveMachine();
+    void insertMachineConfigFile();
 
-    private slots:
-        void readMachineStandardOut();
-        void readMachineErrorOut();
-        void machineStarted();
-        void machineFinished(int exitCode, QProcess::ExitStatus exitStatus);
+signals:
+    void machineStateChangedSignal(States newState);
 
-    protected:
+public slots:
 
-    private:
-        // General
-        QString name;
-        QString OSType;
-        QString OSVersion;
-        QString type;
-        QString path;
-        QString configPath;
-        QUuid uuid;
-        QString description;
-        States state;
+private slots:
+    void readMachineStandardOut();
+    void readMachineErrorOut();
+    void machineStarted();
+    void machineFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
-        // Hardware - CPU
-        QString CPUType;
-        int CPUCount;
-        int socketCount;
-        int coresSocket;
-        int threadsCore;
-        int maxHotCPU;
+protected:
+private:
+    // General
+    QString name;
+    QString OSType;
+    QString OSVersion;
+    QString type;
+    QString path;
+    QString configPath;
+    QUuid uuid;
+    QString description;
+    States state;
 
-        // Hardware - GPU
-        QString GPUType;
-        QString keyboard;
+    // Hardware - CPU
+    QString CPUType;
+    int CPUCoreCount;
+    int CPUThreadCount;
+    int socketCount;
+    int coresSocket;
+    int threadsCore;
+    int maxHotCPU;
 
-        // Hardware - RAM
-        qlonglong RAM;
+    // Hardware - GPU
+    QString GPUType;
+    QString keyboard;
+    QString display;
 
-        // Hardware - Audio
-        QStringList audio;
-        QString hostSoundSystem;
+    // Hardware - RAM
+    qlonglong RAM;
 
-        // Hardware - Network
-        bool useNetwork;
+    // Hardware - Audio
+    QStringList audio;
+    QString hostSoundSystem;
 
-        // Hardware - media
-        QList<Media *> media;
+    // Hardware - Network
+    bool useNetwork;
 
-        // Accelerator
-        QStringList accelerator;
+    // Hardware - media
+    QList<Media *> media;
 
-        // Boot
-        Boot *boot;
+    // Accelerator
+    QStringList accelerator;
 
-        // Process
-        QProcess *m_machineProcess;
-        QTcpSocket *m_machineTcpSocket;
+    // Boot
+    Boot *boot;
 
-        // Messages
-        QMessageBox *m_saveMachineMessageBox;
-        QMessageBox *m_machineConfigMessageBox;
-        QMessageBox *m_machineStandardOutMessageBox;
-        QMessageBox *m_machineErrorOutMessageBox;
-        QMessageBox *m_machineBinaryErrorMessageBox;
-        QMessageBox *m_failConnectErrorMessageBox;
+    // Process
+    QProcess *m_machineProcess;
+    QTcpSocket *m_machineTcpSocket;
 
-        // Methods
-        QProcessEnvironment buildEnvironment();
-        QStringList generateMachineCommand();
-        void failConnectMachine();
+    // Messages
+    QMessageBox *m_saveMachineMessageBox;
+    QMessageBox *m_machineConfigMessageBox;
+    QMessageBox *m_machineStandardOutMessageBox;
+    QMessageBox *m_machineErrorOutMessageBox;
+    QMessageBox *m_machineBinaryErrorMessageBox;
+    QMessageBox *m_failConnectErrorMessageBox;
+
+    // Methods
+    QProcessEnvironment buildEnvironment();
+    QStringList generateMachineCommand();
+    void failConnectMachine();
 };
 #endif // MACHINE_H
